@@ -13,14 +13,14 @@ class App {
       })
     })
 
-    await Sequelize.initDatabase();
-
+    
     try {
       this.app.listen(this.PORT)
       console.log(`Server running on port ${this.PORT}`)
     } catch (error) {
       console.log(error)
     }
+    await Sequelize.initDatabase();
   }
 }
 
