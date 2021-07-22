@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { USERS } = require('../config/database.tables');
-const sequelize = require('../database').bootstrap();
+const sequelize = require('../database/database').bootstrap();
 
 const User = sequelize.define(USERS,{
   users_username: {
@@ -64,7 +64,8 @@ const User = sequelize.define(USERS,{
       exclude: ['createdAt','updatedAt'] 
     }
   },
-  timestamps:false
+  timestamps: false,
+  freezeTableName: true
 })
 
 module.exports = User

@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { MOVIES } = require('../config/database.tables');
-const sequelize = require('../database').bootstrap();
+const sequelize = require('../database/database').bootstrap();
 
 const Movie = sequelize.define(MOVIES,{
   movies_title: {
@@ -40,7 +40,8 @@ const Movie = sequelize.define(MOVIES,{
       exclude: ['createdAt','updatedAt'] 
     }
   },
-  timestamps:false
+  timestamps: false,
+  freezeTableName: true
 })
 
 module.exports = Movie;

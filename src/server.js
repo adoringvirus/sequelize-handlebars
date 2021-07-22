@@ -1,5 +1,5 @@
 const express = require('express');
-const Sequelize = require('./database')
+const Sequelize = require('./database/database')
 const morgan = require('morgan')
 const path = require('path');
 const RootRouter = require('./routes');
