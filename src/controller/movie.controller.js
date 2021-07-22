@@ -1,0 +1,102 @@
+const Movies = require('../models/movie.model')
+
+module.exports  = {
+  async getAllMovies (req,res){
+    try {
+      const movies = await Movies.findAll()
+      res.json(movies)
+    } catch (error) {
+      console.log(`error`, error)
+      return res.status(500).json({
+        error
+      })
+    }
+  },
+  async getOneMovie (req,res){
+    const { id } = req.params;
+    try {
+      const movie = await Movies.findOne({
+        where:{
+          id:id
+        }
+      })
+      res.status(200).json({
+        message:'',
+        data:movie
+      })
+    } catch (error) {
+      res.status(400).json({
+        message:'Could not find movie',
+        error: error
+      })
+    }
+  },
+  async createMovie (req,res){
+    const { } = req.body
+    try {
+      const newMovie = await Movies.create(req.body,{
+        fields:['']
+      })
+      res.json({
+        message: 'Movie created',
+        data: newMovie
+      })
+    } catch (error) {
+      res.status(400).json(error)
+    }
+  },
+
+  async updateMovie (req,res){
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const { id } = req.params;
+    const { } = req.body;
+
+    const movie = await Movies.findOne({
+      // attributes:[''],
+      where:{
+        id:id
+      }
+    })
+
+    if(!movie) res.status(400).json({
+      message:'User not found'
+    })
+
+    
+    try {
+      res.status(200).json({
+        message:'',
+        data:movie
+      })
+    } catch (error) {
+      res.status(400).json({
+        message:'',
+        error
+      })
+    }
+  },
+
+  deleteMovie (req,res){
+    const { id } = req.params;
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    console.log(ip);
+
+    try {
+      const movie = Movies.destroy({
+        where:{
+          id:id
+        }
+      })
+      res.status(200).json({
+        message:`movie ${id} deleted`,
+        movie:movie
+      })
+    } catch (error) {
+      res.status(400).json({
+        message:'',
+        error:error
+      })
+    }
+  }
+
+}
