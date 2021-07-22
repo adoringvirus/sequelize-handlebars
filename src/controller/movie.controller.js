@@ -4,7 +4,9 @@ module.exports  = {
   async getAllMovies (req,res){
     try {
       const movies = await Movies.findAll()
-      res.json(movies)
+      res.json({
+        data:movies
+      })
     } catch (error) {
       console.log(`error`, error)
       return res.status(500).json({
@@ -64,6 +66,7 @@ module.exports  = {
 
     
     try {
+      movie.update(req.body)
       res.status(200).json({
         message:'',
         data:movie
