@@ -1,0 +1,16 @@
+module.exports = {
+  USERS: 'users',
+  USER_FEATURES : 'user_features',
+  USER_FEATURES_RELATION: 'user_features_relation',
+  USER_ROLES: 'user_roles',
+  USER_STATUS: 'user_status',
+  REVIEWS: 'reviews',
+  CATEGORY: 'category', 
+  COMMENTS: 'comments',
+  USERS_MOVIES_COMMENTS_RELATION:'users_movies_comments_relation',
+  USERS_MOVIES_REVIEWS_RELATION:'users_movies_reviews_relation',
+  MOVIES: 'movies',
+  MOVIES_CATEGORY_RELATION:'movies_category_relation',
+  FILMAKING_MEMBERS: 'filamking_members',
+  FILMAKING_MEMBERS: 'filmaking_members_roles',
+}
