@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const { MOVIES } = require('../config/database.tables');
 const sequelize = require('../database/database').bootstrap();
 
-const Movie = sequelize.define(MOVIES,{
+const MovieModel = sequelize.define(MOVIES,{
   movies_title: {
     allowNull: false,
     type: Sequelize.STRING,
@@ -44,4 +44,4 @@ const Movie = sequelize.define(MOVIES,{
   freezeTableName: true
 })
 
-module.exports = Movie;
+module.exports = MovieModel;

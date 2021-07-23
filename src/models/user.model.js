@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const { USERS } = require('../config/database.tables');
 const sequelize = require('../database/database').bootstrap();
 
-const User = sequelize.define(USERS,{
+const UserModel = sequelize.define(USERS,{
   users_username: {
     type: Sequelize.STRING
   },
@@ -68,4 +68,4 @@ const User = sequelize.define(USERS,{
   freezeTableName: true
 })
 
-module.exports = User
+module.exports = UserModel

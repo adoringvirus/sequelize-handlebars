@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const { USER_STATUS } = require('../config/database.tables');
 const sequelize = require('../database/database').bootstrap();
 
-const UserStatus = sequelize.define(USER_STATUS,{
+const UserStatusModel = sequelize.define(USER_STATUS,{
   user_status_name: {
     type: Sequelize.STRING
   },
@@ -20,4 +20,4 @@ const UserStatus = sequelize.define(USER_STATUS,{
   freezeTableName: true
 })
 
-module.exports = UserStatus
+module.exports = UserStatusModel

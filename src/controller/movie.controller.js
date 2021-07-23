@@ -1,9 +1,9 @@
-const Movies = require('../models/movie.model')
+const MoviesModel = require('../models/movie.model')
 
 module.exports  = {
   async getAllMovies (req,res){
     try {
-      const movies = await Movies.findAll()
+      const movies = await MoviesModel.findAll()
       res.json({
         data:movies
       })
@@ -17,7 +17,7 @@ module.exports  = {
   async getOneMovie (req,res){
     const { id } = req.params;
     try {
-      const movie = await Movies.findOne({
+      const movie = await MoviesModel.findOne({
         where:{
           id:id
         }
@@ -36,7 +36,7 @@ module.exports  = {
   async createMovie (req,res){
     const { } = req.body
     try {
-      const newMovie = await Movies.create(req.body,{
+      const newMovie = await MoviesModel.create(req.body,{
         fields:['']
       })
       res.json({
@@ -53,7 +53,7 @@ module.exports  = {
     const { id } = req.params;
     const { } = req.body;
 
-    const movie = await Movies.findOne({
+    const movie = await MoviesModel.findOne({
       // attributes:[''],
       where:{
         id:id
@@ -85,7 +85,7 @@ module.exports  = {
     console.log(ip);
 
     try {
-      const movie = Movies.destroy({
+      const movie = MoviesModel.destroy({
         where:{
           id:id
         }

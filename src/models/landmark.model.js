@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const Landmark = Sequelize.define('landmark',{
+const LandmarkModel = Sequelize.define('landmark',{
   name: {
     allowNull: false,
     type: Sequelize.STRING
@@ -15,4 +15,4 @@ const Landmark = Sequelize.define('landmark',{
   }
 },{})
 
-module.exports = Landmark
+module.exports = LandmarkModel
