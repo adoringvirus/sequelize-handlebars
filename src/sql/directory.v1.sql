@@ -37,6 +37,10 @@ CREATE TABLE USER_ROLES (
   id UUID DEFAULT gen_random_uuid(),
   user_roles_name VARCHAR(50) NOT NULL,
   user_roles_description VARCHAR(50),
+  user_roles_created_at,
+  user_roles_updated_at,
+  user_roles_created_by,
+  user_roles_updated_by
   PRIMARY KEY (id)
 );
 
@@ -44,6 +48,10 @@ CREATE TABLE USER_STATUS (
   id UUID DEFAULT gen_random_uuid(),
   user_status_name VARCHAR(50),
   user_status_description VARCHAR(500),
+  user_status_created_at,
+  user_status_updated_at,
+  user_status_created_by,
+  user_status_updated_by
   PRIMARY KEY (id)
 );
 
@@ -65,7 +73,7 @@ CREATE TABLE USER_FEATURES_USERS_RELATION (
 CREATE TABLE COMMENTS (
   id UUID DEFAULT gen_random_uuid(),
   comments_rating INT,
-  commnets_comment VARCHAR(1000),
+  comments_comment VARCHAR(1000),
   comments_created_at DATE,
   comments_updated_at DATE,
   comments_created_by UUID,
@@ -116,7 +124,7 @@ CREATE TABLE MOVIES (
 
 CREATE TABLE FILMAKING_MEMBERS (
   id UUID DEFAULT gen_random_uuid(),
-  filmaking_members_firts_name VARCHAR(50) NOT NULL,
+  filmaking_members_first_name VARCHAR(50) NOT NULL,
   filmaking_members_last_name VARCHAR(50) NOT NULL,
   filmaking_members_birth_date DATE,
   filmaking_members_birth_place VARCHAR(50),
@@ -135,6 +143,10 @@ CREATE TABLE FILMAKING_MEMBERS_ROLES (
   filmaking_members_role_name VARCHAR(50) NOT NULL,
   filmaking_members_role_description VARCHAR(300),
   filmaking_members_role_thumbnail VARCHAR(100),
+  filmaking_members_role_created_at,
+  filmaking_members_role_updated_at,
+  filmaking_members_role_created_by,
+  filmaking_members_role_updated_by
   PRIMARY KEY (id)
 );
 
@@ -142,6 +154,10 @@ CREATE TABLE CATEGORY (
   id UUID DEFAULT gen_random_uuid(),
   category_name VARCHAR(50) NOT NULL,
   category_description VARCHAR(500),
+  category_created_at,
+  category_updated_at,
+  category_created_by,
+  category_updated_by
   PRIMARY KEY (id)
 );
 
@@ -232,40 +248,40 @@ insert into USERS (users_username, users_first_name, users_last_name, users_phon
 insert into USERS (users_username, users_first_name, users_last_name, users_phone, users_email, users_password, users_avatar, users_last_login_at, users_last_ip_address, users_created_at, users_updated_at) values (null, 'Janet', 'Brazer', '523-656-1767', null, null, null, null, null, null, null);
 insert into USERS (users_username, users_first_name, users_last_name, users_phone, users_email, users_password, users_avatar, users_last_login_at, users_last_ip_address, users_created_at, users_updated_at) values ('bwoloschin4', 'Brandice', 'Woloschin', '497-836-0106', null, null, null, null, null, null, null);
 
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Hagan', 'Hatherley', '6/8/2021', 'Benin', 'https://robohash.org/quiaautea.png?size=50x50&set=set1', 'Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Hagan', 'Hatherley', '6/8/2021', 'Benin', 'https://robohash.org/quiaautea.png?size=50x50&set=set1', 'Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.
 
 In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.
 
 Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.', '7/19/2021', '7/19/2021', null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Warde', 'Glowacki', '3/1/2021', 'Peru', 'https://robohash.org/adsapienteet.png?size=50x50&set=set1', 'Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.', null, null, null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Valeda', 'Carrell', '2/16/2021', null, null, null, '7/19/2021', '7/19/2021', null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Dawn', 'Toulson', '5/21/2021', 'Honduras', 'https://robohash.org/velnamtenetur.png?size=50x50&set=set1', 'Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Warde', 'Glowacki', '3/1/2021', 'Peru', 'https://robohash.org/adsapienteet.png?size=50x50&set=set1', 'Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.', null, null, null, null);
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Valeda', 'Carrell', '2/16/2021', null, null, null, '7/19/2021', '7/19/2021', null, null);
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Dawn', 'Toulson', '5/21/2021', 'Honduras', 'https://robohash.org/velnamtenetur.png?size=50x50&set=set1', 'Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.
 
 Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.', null, null, null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Hilliard', 'Borless', '7/21/2020', null, null, null, '7/19/2021', '7/19/2021', null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Geordie', 'Landrieu', '3/1/2021', null, null, null, null, null, null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Penn', 'Crebott', '4/13/2021', null, null, null, null, null, null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Piggy', 'Skates', '3/1/2021', 'Sierra Leone', 'https://robohash.org/rationedebitisnumquam.png?size=50x50&set=set1', 'Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.', '7/19/2021', '7/19/2021', null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Addy', 'Mazzeo', '12/30/2020', 'Thailand', 'https://robohash.org/perspiciatisrerumsint.png?size=50x50&set=set1', 'Fusce consequat. Nulla nisl. Nunc nisl.
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Hilliard', 'Borless', '7/21/2020', null, null, null, '7/19/2021', '7/19/2021', null, null);
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Geordie', 'Landrieu', '3/1/2021', null, null, null, null, null, null, null);
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Penn', 'Crebott', '4/13/2021', null, null, null, null, null, null, null);
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Piggy', 'Skates', '3/1/2021', 'Sierra Leone', 'https://robohash.org/rationedebitisnumquam.png?size=50x50&set=set1', 'Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.', '7/19/2021', '7/19/2021', null, null);
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Addy', 'Mazzeo', '12/30/2020', 'Thailand', 'https://robohash.org/perspiciatisrerumsint.png?size=50x50&set=set1', 'Fusce consequat. Nulla nisl. Nunc nisl.
 
 Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.', '7/19/2021', '7/19/2021', null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Casper', 'Tyler', '7/12/2021', 'Portugal', 'https://robohash.org/voluptatemcumautem.png?size=50x50&set=set1', 'Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Casper', 'Tyler', '7/12/2021', 'Portugal', 'https://robohash.org/voluptatemcumautem.png?size=50x50&set=set1', 'Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.
 
 Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.
 
 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.', null, null, null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Yetta', 'Wray', '8/24/2020', 'Russia', 'https://robohash.org/repellatdebitisrerum.png?size=50x50&set=set1', 'Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Yetta', 'Wray', '8/24/2020', 'Russia', 'https://robohash.org/repellatdebitisrerum.png?size=50x50&set=set1', 'Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.
 
 Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.
 
 Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.', '7/19/2021', '7/19/2021', null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Fair', 'Vitte', '11/7/2020', 'Japan', 'https://robohash.org/veniamearumillum.png?size=50x50&set=set1', 'Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Fair', 'Vitte', '11/7/2020', 'Japan', 'https://robohash.org/veniamearumillum.png?size=50x50&set=set1', 'Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.
 
 In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.', '7/19/2021', '7/19/2021', null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Mehetabel', 'Veldstra', '12/11/2020', 'China', 'https://robohash.org/istequosdolorum.png?size=50x50&set=set1', 'In congue. Etiam justo. Etiam pretium iaculis justo.
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Mehetabel', 'Veldstra', '12/11/2020', 'China', 'https://robohash.org/istequosdolorum.png?size=50x50&set=set1', 'In congue. Etiam justo. Etiam pretium iaculis justo.
 
 In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.', '7/19/2021', '7/19/2021', null, null);
-insert into FILMAKING_MEMBERS (filmaking_members_firts_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Callie', 'Haythorne', '1/29/2021', 'Czech Republic', 'https://robohash.org/corporisautomnis.png?size=50x50&set=set1', 'Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.
+insert into FILMAKING_MEMBERS (filmaking_members_first_name, filmaking_members_last_name, filmaking_members_birth_date, filmaking_members_birth_place, filmaking_members_thumbnail, filmaking_members_bio, filmaking_members_created_at, filmaking_members_updated_at, filmaking_members_created_by, filmaking_members_updated_by) values ('Callie', 'Haythorne', '1/29/2021', 'Czech Republic', 'https://robohash.org/corporisautomnis.png?size=50x50&set=set1', 'Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.
 
 Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.', '7/19/2021', '7/19/2021', null, null);
 
