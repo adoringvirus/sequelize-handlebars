@@ -1,9 +1,9 @@
-const Users = require('../models/user.model')
+const UsersModel = require('../models/user.model')
 
 module.exports  = {
   async getAllUsers (req,res){
     try {
-      const users = await Users.findAll({
+      const users = await UsersModel.findAll({
         
       })
       res.json({users:users})
@@ -19,7 +19,7 @@ module.exports  = {
 
     
     try {
-      const user = Users.findOne({
+      const user = UsersModel.findOne({
         where:{
           id:id
         }
@@ -51,7 +51,7 @@ module.exports  = {
     // users_last_ip_address
 
     try {
-      const user = await Users.create({
+      const user = await UsersModel.create({
         users_username,
         users_first_name,
         users_last_name,
@@ -74,7 +74,7 @@ module.exports  = {
     const { id } = req.params;
     const { } = req.body;
 
-    const user = await Users.findOne({
+    const user = await UsersModel.findOne({
       attributes:[''],
       where:{
         id:id
@@ -102,7 +102,7 @@ module.exports  = {
     console.log(ip);
 
     try {
-      const user = Users.destroy({
+      const user = UsersModel.destroy({
         where:{
           id:id
         }

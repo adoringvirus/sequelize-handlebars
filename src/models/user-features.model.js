@@ -1,14 +1,14 @@
 const Sequelize = require('sequelize');
-const { USER_ROLES } = require('../config/database.tables');
+const { USER_FEATURES } = require('../config/database.tables');
 const sequelize = require('../database/database').bootstrap();
 
-const UserRolesModel = sequelize.define(USER_ROLES,{
-  user_roles_name: {
+const UserFeaturesModel = sequelize.define(USER_FEATURES,{
+  user_features_name: {
     type: Sequelize.STRING
   },
-  user_roles_description: {
+  user_features_description: {
     type: Sequelize.STRING
-  }
+  },
 },{
   defaultScope: {
     attributes: { 
@@ -19,4 +19,4 @@ const UserRolesModel = sequelize.define(USER_ROLES,{
   freezeTableName: true
 })
 
-module.exports = UserRolesModel;
+module.exports = UserFeaturesModel;

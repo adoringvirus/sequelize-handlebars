@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize');
-const { USER_ROLES } = require('../config/database.tables');
+const { CATEGORY } = require('../config/database.tables');
 const sequelize = require('../database/database').bootstrap();
 
-const UserRolesModel = sequelize.define(USER_ROLES,{
-  user_roles_name: {
+const CategoryModel = sequelize.define(CATEGORY,{
+  category_name: {
     type: Sequelize.STRING
   },
-  user_roles_description: {
+  category_description: {
     type: Sequelize.STRING
   }
 },{
@@ -19,4 +19,4 @@ const UserRolesModel = sequelize.define(USER_ROLES,{
   freezeTableName: true
 })
 
-module.exports = UserRolesModel;
+module.exports = CategoryModel;

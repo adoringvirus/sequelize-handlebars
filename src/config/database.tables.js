@@ -11,6 +11,6 @@ module.exports = {
   USERS_MOVIES_REVIEWS_RELATION:'users_movies_reviews_relation',
   MOVIES: 'movies',
   MOVIES_CATEGORY_RELATION:'movies_category_relation',
-  FILMAKING_MEMBERS: 'filamking_members',
-  FILMAKING_MEMBERS: 'filmaking_members_roles',
+  FILMAKING_MEMBERS: 'filmaking_members',
+  FILMAKING_MEMBERS_ROLES: 'filmaking_members_roles',
 }
