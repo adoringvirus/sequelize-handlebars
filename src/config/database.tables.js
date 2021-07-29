@@ -1,7 +1,7 @@
 module.exports = {
   USERS: 'users',
   USER_FEATURES : 'user_features',
-  USER_FEATURES_RELATION: 'user_features_relation',
+  USER_FEATURES_RELATION: 'user_features_users_relation',
   USER_ROLES: 'user_roles',
   USER_STATUS: 'user_status',
   REVIEWS: 'reviews',
