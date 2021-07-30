@@ -1,12 +1,30 @@
+const CommentsModel = require('../models/comments.model')
+const MovieModel = require('../models/movie.model')
+const UsersFeaturesRelationModel = require('../models/relations/user-features-users.model')
+const UserFeaturesModel = require('../models/user-features.model')
+const UserRolesModel = require('../models/user-roles.model')
+const UserStatusModel = require('../models/user-status.model')
 const UsersModel = require('../models/user.model')
 
+
 module.exports  = {
-  async getAllUsers (req,res){
+  async getAllUsers (
+    /** @type {import('express').Request } */
+    req,
+    /** @type {import('express').Response } */
+    res
+  ){
     try {
       const users = await UsersModel.findAll({
-        
+        include: [
+          UserRolesModel,
+          UserStatusModel,
+          UserFeaturesModel,
+          CommentsModel,
+          MovieModel
+        ],
       })
-      res.json({users:users})
+      res.status(200).json({users:users})
     } catch (error) {
       console.log(`error`, error)
       return res.status(500).json({
@@ -14,10 +32,14 @@ module.exports  = {
       })
     }
   },
-  async getOneUser(req,res){
+  async getOneUser(
+    /** @type {import('express').Request } */
+    req,
+    /** @type {import('express').Response } */
+    res
+  ){
     const { id } = req.params;
 
-    
     try {
       const user = UsersModel.findOne({
         where:{
@@ -36,7 +58,12 @@ module.exports  = {
       })
     }
   },
-  async createUser (req,res){
+  async createUser (
+    /** @type {import('express').Request } */
+    req,
+    /** @type {import('express').Response } */
+    res
+  ){
     const { 
       users_username,
       users_first_name,
@@ -70,12 +97,17 @@ module.exports  = {
       })
     }
   },
-  async updateUser(req,res){
+  async updateUser(
+    /** @type {import('express').Request } */
+    req,
+    /** @type {import('express').Response } */
+    res
+  ){
     const { id } = req.params;
     const { } = req.body;
 
     const user = await UsersModel.findOne({
-      attributes:[''],
+      // attributes:[''],
       where:{
         id:id
       }
@@ -96,7 +128,12 @@ module.exports  = {
       })
     }
   },
-  deleteUser (req,res){
+  deleteUser (
+    /** @type {import('express').Request } */
+    req,
+    /** @type {import('express').Response } */
+    res
+  ){
     const { id } = req.params;
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     console.log(ip);
