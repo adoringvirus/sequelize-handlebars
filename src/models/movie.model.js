@@ -1,5 +1,9 @@
 const Sequelize = require('sequelize');
 const { MOVIES } = require('../config/database.tables');
+const CategoryModel = require('./category.model');
+const MovieCategoryRelationModel = require('./relations/movies-category.model');
+const UserMovieCommentsRelation = require('./relations/users-movies-comments.model');
+// const UserModel = require('./user.model');
 const sequelize = require('../database/database').bootstrap();
 
 const MovieModel = sequelize.define(MOVIES,{
@@ -43,5 +47,19 @@ const MovieModel = sequelize.define(MOVIES,{
   timestamps: false,
   freezeTableName: true
 })
+
+MovieModel.belongsToMany(CategoryModel,{
+  through: MovieCategoryRelationModel,
+  foreignKey:'movies_id'
+})
+
+CategoryModel.belongsToMany(MovieModel,{
+  through: MovieCategoryRelationModel,
+  foreignKey:'category_id'
+})
+
+
+
+
 
 module.exports = MovieModel;
