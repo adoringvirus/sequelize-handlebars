@@ -4,6 +4,6 @@ const { baseRoute } = require('./base.routes');
 
 
 const CategoryRouter = Router();
-baseRoute(CategoryRouter,CategoryModel,'category','movies/category')
+baseRoute(CategoryRouter,CategoryModel,'category','movies/categories')
 
 module.exports = CategoryRouter;
