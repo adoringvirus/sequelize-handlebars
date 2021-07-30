@@ -1,8 +1,10 @@
+const { Model } = require('sequelize');
 const Sequelize = require('sequelize');
 const { USER_STATUS } = require('../config/database.tables');
 const sequelize = require('../database/database').bootstrap();
 
-const UserStatusModel = sequelize.define(USER_STATUS,{
+class UserStatusModel extends Model {}
+UserStatusModel.init({
   user_status_name: {
     type: Sequelize.STRING
   },
@@ -11,13 +13,12 @@ const UserStatusModel = sequelize.define(USER_STATUS,{
     type: Sequelize.STRING
   }
 },{
-  defaultScope: {
-    attributes: { 
-      exclude: ['createdAt','updatedAt'] 
-    },
-  },
+  sequelize,
+  modelName:'user_status',
   timestamps: false,
-  freezeTableName: true
+  freezeTableName: true,
+  underscored: true,
 })
 
-module.exports = UserStatusModel
+
+module.exports = UserStatusModel;
