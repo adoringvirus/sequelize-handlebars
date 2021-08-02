@@ -1,70 +1,69 @@
 const Sequelize = require('sequelize');
 const { USERS } = require('../config/database.tables');
 const CommentsModel = require('./comments.model');
+const LikeModel = require('./like.model');
 const MovieModel = require('./movie.model');
-const MovieCategoryRelationModel = require('./relations/movies-category.model');
 const UsersFeaturesRelationModel = require('./relations/user-features-users.model');
-const UserMovieCommentsRelation = require('./relations/users-movies-comments.model');
+const ReviewsModel = require('./reviews.model');
 const UserFeaturesModel = require('./user-features.model');
-// const UserRolesModel = require('./user-roles.model');
 const UserStatusModel = require('./user-status.model');
 const sequelize = require('../database/database').bootstrap();
 
 const UserModel = sequelize.define(USERS,{
-  users_username: {
+  user_username: {
     type: Sequelize.STRING
   },
-  users_first_name: {
+  user_first_name: {
     allowNull: false,
     type: Sequelize.STRING
   },
-  users_last_name:{
+  user_last_name:{
     allowNull: false,
     type: Sequelize.STRING
   },
-  users_phone:{
+  user_phone:{
     type: Sequelize.STRING
   },
-  users_email:{
+  user_email:{
     type: Sequelize.STRING,
     allowNull: false
   },
-  users_password: {
+  user_password: {
     allowNull: false,
     type: Sequelize.STRING
   },
-  users_avatar: {
+  user_avatar: {
     type: Sequelize.STRING
   },
-  users_last_login_at: {
+  user_last_login_at: {
     type: Sequelize.DATE
   },
-  users_last_ip_address: {
+  user_last_ip_address: {
     type: Sequelize.STRING
   },
-  users_roles_id: {
-    type: Sequelize.UUID,
+  role_id: {
+    type: Sequelize.INTEGER,
   },
-  users_status_id: {
-    type: Sequelize.UUID,
+  status_id: {
+    type: Sequelize.INTEGER,
   },
-  users_created_at: {
+  created_at: {
     type: Sequelize.DATE
   },
-  users_updated_at: {
+  updated_at: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW 
   },
-  users_created_by: {
+  created_by: {
     type: Sequelize.DATE
   },
-  users_updated_by: {
+  updated_by: {
     type: Sequelize.DATE
   }
 },{ 
   getterMethods: {
     fullName() {
-      return this.users_first_name + ' ' + this.users_last_name;
+      return this.user_first_name + ' ' + this.user_last_name;
     }
   },
   defaultScope: {
@@ -82,64 +81,49 @@ const UserModel = sequelize.define(USERS,{
   freezeTableName: true
 })
 
-// UserRolesModel.hasMany(UserModel,{
-//   foreignKey: 'users_id',
-// })
 
-
-UserModel.belongsToMany(MovieModel,{
-  through: UserMovieCommentsRelation,
-  foreignKey:'users_id'
-})
-
-MovieModel.belongsToMany(UserModel,{
-  through: UserMovieCommentsRelation,
-  foreignKey:'movies_id'
-})
-
-
-// UserModel.belongsTo(UserRolesModel,{
-//   foreignKey: 'users_id'
-// })
-
-// UserRolesModel.hasMany(UserModel,{
-//   foreignKey: 'users_id',
-// })
-
-UserModel.belongsToMany(CommentsModel,{
-  through: UserMovieCommentsRelation,
-  foreignKey: 'users_id',
-})
-
-CommentsModel.belongsToMany(UserModel,{
-  through: UserMovieCommentsRelation,
-  foreignKey: 'comments_id',
-})
-
+// * User Features Relation
 UserModel.belongsToMany(UserFeaturesModel,{
   through: UsersFeaturesRelationModel,
-  foreignKey:'users_id',
+  foreignKey:'user_id',
 })
 
 UserFeaturesModel.belongsToMany(UserModel,{
   through: UsersFeaturesRelationModel,
-  foreignKey: 'user_features_id',
+  foreignKey: 'user_feature_id',
   onDelete:'CASCADE'
 })
 
+// * Comments Relation
+CommentsModel.belongsTo(UserModel,{
+  foreignKey: 'user_id',
+})
+UserModel.hasMany(CommentsModel)
 
+// * Reviews Relation
+ReviewsModel.belongsTo(UserModel,{
+  foreignKey:'user_id'
+})
+ReviewsModel.hasMany(ReviewsModel)
 
+// * Like Relation
+LikeModel.belongsTo(UserModel,{
+  foreignKey:'user_id'
+})
+UserModel.hasMany(LikeModel)
+
+// * Status Relation
 UserModel.belongsTo(UserStatusModel,{
   foreignKey: {
-    name:'users_status_id',
-    type: Sequelize.DataTypes.UUID
+    name:'status_id',
+    type: Sequelize.DataTypes.INT
   }
 });
 
 UserStatusModel.hasMany(UserModel,{
   foreignKey: {
-    name:'users_status_id',
-    type: Sequelize.DataTypes.UUID
+    name:'status_id',
+    type: Sequelize.DataTypes.INT
   }
 })
 
