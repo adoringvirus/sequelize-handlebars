@@ -4,10 +4,10 @@ const UserModel = require('./user.model');
 const sequelize = require('../database/database').bootstrap();
 
 const UserRolesModel = sequelize.define(USER_ROLES,{
-  user_roles_name: {
+  user_role_name: {
     type: Sequelize.STRING
   },
-  user_roles_description: {
+  user_role_description: {
     type: Sequelize.STRING
   }
 },{
@@ -23,25 +23,16 @@ const UserRolesModel = sequelize.define(USER_ROLES,{
 
 UserModel.belongsTo(UserRolesModel,{
   foreignKey: {
-    name:'users_roles_id',
+    name:'role_id',
     type: Sequelize.DataTypes.UUID
   }
 })
 
 UserRolesModel.hasMany(UserModel,{
   foreignKey: {
-    name:'users_roles_id',
+    name:'role_id',
     type: Sequelize.DataTypes.UUID
   }
 })
-
-// 
-
-// UserRolesModel.hasMany(UserModel,{
-//   foreignKey: {
-//     name:'users_roles_id',
-//     type: Sequelize.DataTypes.UUID
-//   }
-// })
 
 module.exports = UserRolesModel;

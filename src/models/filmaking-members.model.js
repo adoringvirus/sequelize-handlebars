@@ -3,38 +3,38 @@ const { FILMAKING_MEMBERS } = require('../config/database.tables');
 const sequelize = require('../database/database').bootstrap();
 
 const FilmakingMembersModel = sequelize.define(FILMAKING_MEMBERS,{
-  filmaking_members_first_name: {
+  filmaking_member_first_name: {
     type: Sequelize.STRING
   },
-  filmaking_members_last_name: {
+  filmaking_member_last_name: {
     type: Sequelize.STRING
   },
-  filmaking_members_birth_date: {
+  filmaking_member_birth_date: {
     type: Sequelize.DATE
   },
-  filmaking_members_birth_place: {
+  filmaking_member_birth_place: {
     type: Sequelize.STRING
   },
-  filmaking_members_thumbnail: {
+  filmaking_member__thumbnail: {
     type: Sequelize.STRING
   },
-  filmaking_members_bio: {
+  filmaking_member__bio: {
     type: Sequelize.STRING
   },
-  filmaking_members_role_id: {
+  role_id: {
     type: Sequelize.UUID
   },
-  filmaking_members_created_at: {
+  created_at: {
     type: Sequelize.DATE
   },
-  filmaking_members_updated_at: {
+  updated_at: {
     type: Sequelize.STRING
   },
-  filmaking_members_created_by: {
-    type: Sequelize.UUID
+  created_by: {
+    type: Sequelize.INTEGER
   },
-  filmaking_members_updated_by: {
-    type: Sequelize.UUID
+  updated_by: {
+    type: Sequelize.INTEGER
   }
 
 },{

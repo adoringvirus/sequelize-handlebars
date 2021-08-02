@@ -3,11 +3,11 @@ const { USER_FEATURES_RELATION } = require('../../config/database.tables');
 const sequelize = require('../../database/database').bootstrap();
 
 const UsersFeaturesRelationModel = sequelize.define(USER_FEATURES_RELATION,{
-  users_id: {
-    type: Sequelize.UUID,
+  user_id: {
+    type: Sequelize.INTEGER,
   },
-  user_features_id: {
-    type: Sequelize.UUID,
+  user_feature_id: {
+    type: Sequelize.INTEGER,
   }
 },{
   defaultScope: {
@@ -18,15 +18,6 @@ const UsersFeaturesRelationModel = sequelize.define(USER_FEATURES_RELATION,{
   timestamps: false,
   freezeTableName: true
 })
-
-// UsersFeaturesRelationModel.hasMany(UserModel,{
-//   foreignKey: 'id'
-// });
-
-
-// UsersFeaturesRelationModel.hasMany(UserFeaturesModel,{
-//   foreignKey:'id'
-// });
 
 
 module.exports = UsersFeaturesRelationModel;

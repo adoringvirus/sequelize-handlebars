@@ -1,13 +1,13 @@
 const Sequelize = require('sequelize');
-const { MOVIES_CATEGORY_RELATION } = require('../../config/database.tables');
+const { MOVIES_CATEGORIES_RELATION: MOVIES_CATEGORY_RELATION } = require('../../config/database.tables');
 const sequelize = require('../../database/database').bootstrap();
 
 const MovieCategoryRelationModel = sequelize.define(MOVIES_CATEGORY_RELATION,{
-  movies_id: {
-    type: Sequelize.UUID,
+  movie_id: {
+    type: Sequelize.INTEGER,
   },
   category_id: {
-    type: Sequelize.UUID,
+    type: Sequelize.INTEGER,
   }
 },{
   defaultScope: {
