@@ -14,7 +14,7 @@ UserStatusModel.init({
   }
 },{
   sequelize,
-  modelName:'user_status',
+  modelName:USER_STATUS,
   timestamps: false,
   freezeTableName: true,
   underscored: true,

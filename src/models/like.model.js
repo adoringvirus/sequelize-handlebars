@@ -1,28 +1,27 @@
 const Sequelize = require('sequelize');
-const { REVIEWS } = require('../config/database.tables');
+const { LIKES } = require('../config/database.tables');
 const MovieModel = require('./movie.model');
 const sequelize = require('../database/database').bootstrap();
 
-const ReviewsModel = sequelize.define(REVIEWS,{
-  review_name: {
-    type: Sequelize.STRING
-  },
-  review_description: {
-    type: Sequelize.STRING
-  },
-  created_at:{
-    type: Sequelize.DATE
-  },
-  updated_at:{
-    type: Sequelize.DATE
-  },
-  created_by:{
+const LikeModel = sequelize.define(LIKES,{
+  user_id: {
     type: Sequelize.INTEGER
   },
-  updated_by:{
+  movie_id: {
+    type: Sequelize.STRING
+  },
+  created_at: {
+    type: Sequelize.DATE
+  },
+  updated_at: {
+    type: Sequelize.DATE
+  },
+  created_by: {
     type: Sequelize.INTEGER
   },
-
+  updated_by: {
+    type: Sequelize.INTEGER
+  }
 },{
   defaultScope: {
     attributes: { 
@@ -30,12 +29,14 @@ const ReviewsModel = sequelize.define(REVIEWS,{
     },
   },
   timestamps: false,
-  freezeTableName: true
-});
-
-ReviewsModel.belongsTo(MovieModel,{
-  foreignKey:'movie_id'
+  freezeTableName: true,
+  underscored: true,
 })
-MovieModel.hasMany(ReviewsModel)
 
-module.exports = ReviewsModel;
+LikeModel.belongsTo(MovieModel,{
+  foreignKey: 'movie_id',
+})
+MovieModel.hasMany(LikeModel);
+
+
+module.exports = LikeModel;
