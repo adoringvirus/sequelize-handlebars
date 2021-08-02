@@ -23,7 +23,7 @@ CREATE TABLE postgres.USERS (
   user_last_login_at DATE,
   user_last_ip_address INET,
   status_id int,
-  role_ide int,
+  role_id int,
   created_at timestamp,
   updated_at timestamp,
   created_by int,
@@ -63,7 +63,7 @@ CREATE TABLE USER_FEATURES (
 CREATE TABLE USER_FEATURES_USERS_RELATION (
   id bigserial,
   user_id int,
-  features_id int,
+  user_feature_id int,
   PRIMARY KEY (id)
 );
 
@@ -71,7 +71,7 @@ CREATE TABLE USER_FEATURES_USERS_RELATION (
 CREATE TABLE COMMENTS (
   id bigserial,
   comment_rating INT,
-  comment_comment VARCHAR(1000),
+  comment VARCHAR(2000),
   user_id int,
   movie_id int,
   created_at timestamp,
@@ -114,7 +114,7 @@ CREATE TABLE MOVIES (
   movie_url VARCHAR(100),
   movie_thumbnail VARCHAR(100),
   movie_like_count int,
-  like_id int,
+  like_count int,
   created_at timestamp,
   updated_at timestamp,
   created_by int,
@@ -154,7 +154,7 @@ CREATE TABLE CATEGORIES (
   id bigserial,
   category_name VARCHAR(50) NOT NULL,
   category_description VARCHAR(500),
-  category_thumbail VARCHAR(50),
+  category_thumbnail VARCHAR(50),
   created_at timestamp,
   updated_at timestamp,
   created_by int,
@@ -228,6 +228,22 @@ INSERT INTO USER_STATUSES (user_status_name,user_status_description) VALUES ('dr
 INSERT INTO CATEGORIES (category_name,category_description) VALUES ('horror','');
 INSERT INTO CATEGORIES (category_name,category_description) VALUES ('action','');
 
+insert into movies_categories_relation ( category_id, movie_id ) values ( 1, 11 );
+insert into movies_categories_relation ( category_id, movie_id ) values ( 2, 11 );
+
+insert into comments ( comment, movie_id, user_id ) values ('hello world',11,1);
+insert into comments ( comment, movie_id, user_id ) values ('nothing much',11,2);
+
+insert into comments ( comment, movie_id, user_id ) values ('world',10,1);
+insert into comments ( comment, movie_id, user_id ) values ('much',13,1);
+
+insert into user_features_users_relation (user_id,user_feature_id) 
+values (1,2);
+insert into user_features_users_relation (user_id,user_feature_id) 
+values (1,1);
+
+
+
 INSERT INTO FILMAKING_MEMBERS_ROLES (
   filmaking_members_role_name,
   filmaking_members_role_description,
@@ -252,6 +268,10 @@ values          ('cduckham0', 'Cloris', 'Duckham', '829-345-1234','dunkan@gmail.
 insert into USERS (user_username, user_first_name, user_last_name, user_phone, user_email, user_password, user_avatar, user_last_login_at, user_last_ip_address, created_at, updated_at) 
 values ('rhinkensen1', 'Rahal', 'Hinkensen', '304-195-7502', 'rhinkensen1@theatlantic.com', 'FJ4FRqJC', 'https://robohash.org/facilisatmolestiae.png?size=50x50&set=set1', null, null, '7/19/2021', null);
 
+
+update users 
+set role_id=1,status_id=1
+where id=1;
 
 insert into FILMAKING_MEMBERS (filmaking_member_first_name, filmaking_member_last_name, filmaking_member_birth_date, filmaking_member_birth_place, filmaking_member_thumbnail, filmaking_member_bio, created_at, updated_at, created_by, updated_by) values ('Warde', 'Glowacki', '3/1/2021', 'Peru', 'https://robohash.org/adsapienteet.png?size=50x50&set=set1', 'Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.', null, null, null, null);
 insert into FILMAKING_MEMBERS (filmaking_member_first_name, filmaking_member_last_name, filmaking_member_birth_date, filmaking_member_birth_place, filmaking_member_thumbnail, filmaking_member_bio, created_at, updated_at, created_by, updated_by) values ('Valeda', 'Carrell', '2/16/2021', null, null, null, '7/19/2021', '7/19/2021', null, null);
