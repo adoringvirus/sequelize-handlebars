@@ -1,27 +1,26 @@
 const Sequelize = require('sequelize');
 const { COMMENTS } = require('../config/database.tables');
 const MovieModel = require('./movie.model');
-const UserMovieCommentsRelation = require('./relations/users-movies-comments.model');
 const sequelize = require('../database/database').bootstrap();
 
 const CommentsModel = sequelize.define(COMMENTS,{
-  comments_rating: {
+  comment_rating: {
     type: Sequelize.INTEGER
   },
-  comments_comment: {
+  comment: {
     type: Sequelize.STRING
   },
-  comments_created_at: {
+  created_at: {
     type: Sequelize.DATE
   },
-  comments_updated_at: {
+  updated_at: {
     type: Sequelize.DATE
   },
-  comments_created_by: {
-    type: Sequelize.UUID
+  created_by: {
+    type: Sequelize.INTEGER
   },
-  comments_updated_by: {
-    type: Sequelize.UUID
+  updated_by: {
+    type: Sequelize.INTEGER
   }
 },{
   defaultScope: {
@@ -34,19 +33,9 @@ const CommentsModel = sequelize.define(COMMENTS,{
   underscored: true,
 })
 
-CommentsModel.belongsToMany(MovieModel,{
-  through: UserMovieCommentsRelation,
-  foreignKey: 'comments_id',
+CommentsModel.belongsTo(MovieModel,{
+  foreignKey: 'movie_id',
 })
-
-// UserModel.belongsToMany(CommentsModel,{
-//   through: UserMovieCommentsRelation,
-//   foreignKey: 'comments_id',
-// })
-
-MovieModel.belongsToMany(CommentsModel,{
-  through: UserMovieCommentsRelation,
-  foreignKey: 'movies_id',
-})
+MovieModel.hasMany(CommentsModel)
 
 module.exports = CommentsModel;
