@@ -1,5 +1,9 @@
 const Sequelize = require('sequelize');
 const { FILMAKING_MEMBERS } = require('../config/database.tables');
+const FilmakingMembersRolesModel = require('./filmaking-members-roles.model');
+const MovieModel = require('./movie.model');
+const FilmakingMembersMoviesRelationModel = require('./relations/filmaking-member-movies.model');
+const FilmakingMembersMemberRolesRelationModel = require('./relations/filmaking-members-roles.model');
 const sequelize = require('../database/database').bootstrap();
 
 const FilmakingMembersModel = sequelize.define(FILMAKING_MEMBERS,{
@@ -15,14 +19,11 @@ const FilmakingMembersModel = sequelize.define(FILMAKING_MEMBERS,{
   filmaking_member_birth_place: {
     type: Sequelize.STRING
   },
-  filmaking_member__thumbnail: {
+  filmaking_member_thumbnail: {
     type: Sequelize.STRING
   },
-  filmaking_member__bio: {
+  filmaking_member_bio: {
     type: Sequelize.STRING
-  },
-  role_id: {
-    type: Sequelize.UUID
   },
   created_at: {
     type: Sequelize.DATE
@@ -45,6 +46,27 @@ const FilmakingMembersModel = sequelize.define(FILMAKING_MEMBERS,{
   },
   timestamps: false,
   freezeTableName: true
+})
+
+FilmakingMembersModel.belongsToMany(FilmakingMembersRolesModel,{
+  through: FilmakingMembersMemberRolesRelationModel,
+  foreignKey:'filmaking_member_id',
+})
+
+FilmakingMembersRolesModel.belongsToMany(FilmakingMembersModel,{
+  through: FilmakingMembersMemberRolesRelationModel,
+  foreignKey:'filmaking_member_role_id',
+})
+
+
+FilmakingMembersModel.belongsToMany(MovieModel,{
+  through: FilmakingMembersMoviesRelationModel,
+  foreignKey:'filmaking_member_id',
+})
+
+MovieModel.belongsToMany(FilmakingMembersModel,{
+  through: FilmakingMembersMoviesRelationModel,
+  foreignKey:'movie_id',
 })
 
 module.exports = FilmakingMembersModel;
