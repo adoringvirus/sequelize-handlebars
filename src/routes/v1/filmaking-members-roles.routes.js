@@ -8,7 +8,7 @@ baseRoute(
   FilmakingMembersRolesRouter,
   FilmakingMembersRolesModel,
   'filmaking-members-roles',
-  'movies/filmaking-members-roles'
+  'filmaking-members-roles'
 )
 
 module.exports = FilmakingMembersRolesRouter;

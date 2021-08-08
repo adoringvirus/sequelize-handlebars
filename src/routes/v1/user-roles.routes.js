@@ -17,17 +17,14 @@ UserRolesRouter.get('/users/user-roles',(req,res)=>{
     }).catch(error=>{
       console.log(`error`, error)
     })
-
-
-    // console.log(`error`, error)
-
   
 })
-// baseRoute(
-//   UserRolesRouter,
-//   UserRolesModel,
-//   'user-roles',
-//   'users/user-roles'
-// )
+
+baseRoute(
+  UserRolesRouter,
+  UserRolesModel,
+  'user-roles',
+  'user-roles'
+)
 
 module.exports = UserRolesRouter;

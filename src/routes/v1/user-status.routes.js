@@ -17,12 +17,8 @@ UserStatusRouter.get('/users/user-status',(req,res)=>{
   }).catch(error=>{
     console.log(`error`, error)
   })
-
-
-  // console.log(`error`, error)
-
-
 })
-baseRoute(UserStatusRouter,UserStatusModel,'user-status','users/user-status')
+
+baseRoute(UserStatusRouter,UserStatusModel,'user-status','user-status')
 
 module.exports = UserStatusRouter;
