@@ -4,12 +4,11 @@ const MovieModel = require('./movie.model');
 const sequelize = require('../database/database').bootstrap();
 
 const ReviewsModel = sequelize.define(REVIEWS,{
-  review_name: {
-    type: Sequelize.STRING
-  },
   review_description: {
     type: Sequelize.STRING
   },
+  user_id: Sequelize.INTEGER,
+  movie_id: Sequelize.INTEGER,
   created_at:{
     type: Sequelize.DATE
   },
@@ -30,12 +29,15 @@ const ReviewsModel = sequelize.define(REVIEWS,{
     },
   },
   timestamps: false,
-  freezeTableName: true
+  freezeTableName: true,
+  underscored:true
 });
 
 ReviewsModel.belongsTo(MovieModel,{
   foreignKey:'movie_id'
 })
-MovieModel.hasMany(ReviewsModel)
+MovieModel.hasMany(ReviewsModel,{
+  sourceKey:'id'
+})
 
 module.exports = ReviewsModel;
