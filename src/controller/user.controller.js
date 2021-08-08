@@ -1,6 +1,8 @@
 const CommentsModel = require('../models/comments.model')
+const LikeModel = require('../models/like.model')
 const MovieModel = require('../models/movie.model')
 const UsersFeaturesRelationModel = require('../models/relations/user-features-users.model')
+const ReviewsModel = require('../models/reviews.model')
 const UserFeaturesModel = require('../models/user-features.model')
 const UserRolesModel = require('../models/user-roles.model')
 const UserStatusModel = require('../models/user-status.model')
@@ -21,7 +23,8 @@ module.exports  = {
           UserStatusModel,
           UserFeaturesModel,
           CommentsModel,
-          MovieModel
+          LikeModel,
+          ReviewsModel
         ],
       })
       res.status(200).json({users:users})

@@ -1,6 +1,9 @@
 const CategoryModel = require('../models/category.model')
 const CommentsModel = require('../models/comments.model')
+const FilmakingMembersModel = require('../models/filmaking-members.model')
+const LikeModel = require('../models/like.model')
 const MoviesModel = require('../models/movie.model')
+const ReviewsModel = require('../models/reviews.model')
 const UserModel = require('../models/user.model')
 
 module.exports  = {
@@ -11,8 +14,14 @@ module.exports  = {
           model:CategoryModel,
           as:'categories'
         },{
-          model: UserModel
-        }]
+          model:LikeModel
+        },{
+          model:CommentsModel
+        },{
+          model:FilmakingMembersModel
+        },{
+          model:ReviewsModel
+        },]
       })
       res.json({
         data:movies
