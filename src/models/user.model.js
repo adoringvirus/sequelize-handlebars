@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const { USERS } = require('../config/database.tables');
 const CommentsModel = require('./comments.model');
 const LikeModel = require('./like.model');
-const MovieModel = require('./movie.model');
+// const MovieModel = require('./movie.model');
 const UsersFeaturesRelationModel = require('./relations/user-features-users.model');
 const ReviewsModel = require('./reviews.model');
 const UserFeaturesModel = require('./user-features.model');
@@ -104,7 +104,7 @@ UserModel.hasMany(CommentsModel)
 ReviewsModel.belongsTo(UserModel,{
   foreignKey:'user_id'
 })
-ReviewsModel.hasMany(ReviewsModel)
+UserModel.hasMany(ReviewsModel)
 
 // * Like Relation
 LikeModel.belongsTo(UserModel,{
