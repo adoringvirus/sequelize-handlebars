@@ -1,5 +1,5 @@
 const { baseController } = require('../../controller/base.controller');
-const { isSuperAdmin } = require('../../middlewares/user.middleware');
+const { isSuperAdmin } = require('../../middlewares/auth.middleware');
 
 const defaultOptions = {
   isGetProtected: true,
