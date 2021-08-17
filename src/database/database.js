@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const DBConfig = require('../config/database.config');
-
+const pg = require('pg')
 class sequelize {
   connection = {}
 
@@ -15,7 +15,6 @@ class sequelize {
       DBConfig.POSTGRES_PASSWORD, {
         host: DBConfig.POSTGRES_HOST,
         dialect: 'postgres',
-        
       },
     )
   }
@@ -28,6 +27,18 @@ class sequelize {
       console.log(`Database not connected`)
       console.log(err)
     }
+  }
+
+  async pool(){
+    module.exports.POOL = new pg.Pool({
+      uri: "",
+      host: POSTGRES_HOST,
+      user: POSTGRES_USER,
+      password: POSTGRES_PASSWORD,
+      database: POSTGRES_DB,
+      port: POSTGRES_PORT,
+      // ssl: true
+    });
   }
 }
 
