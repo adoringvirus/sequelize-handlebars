@@ -1,3 +1,4 @@
+const FilmakingMembersMoviesRelationModel = require("../models/relations/filmaking-member-movies.model");
 const FilmakingMembersMemberRolesModel = require("../models/relations/filmaking-members-roles.model");
 
 module.exports  = {
@@ -60,5 +61,57 @@ module.exports  = {
         error:error.parent.detail
       })
     }
-  }
+  },
+  async assignFilmakingMemberToMovie(
+    /** @type {import('express').Request } */
+    req,
+    /** @type {import('express').Response } */
+    res
+  ){
+    const { filmakingMemberId,movieId } = req.params;
+    try {
+      const newMovieAssignment  = await FilmakingMembersMoviesRelationModel.create({
+        filmaking_member_id: filmakingMemberId,
+        movie_id: movieId
+      });
+  
+      return res.status(200).json({
+        message:'',
+        data: newMovieAssignment
+      })
+    } catch (error) {
+      console.log(`error`, error)
+      res.status(400).json({
+        message:'',
+        status:'failed',
+        error:error.parent.detail
+      })
+    }
+  },
+  async unsignedFilmakingMemberFromMovie(
+    /** @type {import('express').Request } */
+    req,
+    /** @type {import('express').Response } */
+    res
+  ){
+    const { filmakingMemberId,movieId } = req.params;
+    try {
+      const newMovieAssignment  = await FilmakingMembersMoviesRelationModel.destroy({
+        filmaking_member_id: filmakingMemberId,
+        movie_id: movieId
+      });
+  
+      return res.status(200).json({
+        message:'',
+        data: newMovieAssignment
+      })
+    } catch (error) {
+      console.log(`error`, error)
+      res.status(400).json({
+        message:'',
+        status:'failed',
+        error:error.parent.detail
+      })
+    }
+  },
 }
