@@ -20,6 +20,7 @@ pids
 lib-cov
 .env
 db_data
+redis_data
 # Coverage directory used by tools like istanbul
 coverage
 *.lcov
