@@ -11,3 +11,10 @@ services:
       POSTGRES_DB: postgres
     ports: 
       - "5432:5432"
+  redis_store:
+    image: redis
+    container_name: rdb
+    volumes: 
+      - $PWD/redis_data:/usr/local/etc/redis
+    ports: 
+      - "6379:6379"
