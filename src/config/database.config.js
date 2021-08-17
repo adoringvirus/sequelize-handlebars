@@ -1,8 +1,30 @@
 
-module.exports = {
-  POSTGRES_USER:process.env.POSTGRES_USER || 'postgres', 
-  POSTGRES_DB:process.env.POSTGRES_DB || 'postgres',
-  POSTGRES_PASSWORD:process.env.POSTGRES_PASSWORD || '123456789', 
-  POSTGRES_HOST:process.env.POSTGRES_HOST || "localhost",
+const PG_OPTIONS = {
+  POSTGRES_USER: process.env.POSTGRES_USER || 'postgres', 
+  POSTGRES_DB: process.env.POSTGRES_DB || 'postgres',
+  POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD || '123456789', 
+  POSTGRES_HOST: process.env.POSTGRES_HOST || "localhost",
+  POSTGRES_PORT: process.env.POSTGRES_PORT || 5432,
   dialect: 'postgres'
 }
+
+const { 
+  POSTGRES_DB,
+  POSTGRES_HOST, 
+  POSTGRES_PASSWORD, 
+  POSTGRES_PORT, 
+  POSTGRES_USER 
+} = PG_OPTIONS;
+
+module.exports = {
+  POSTGRES_USER: POSTGRES_USER, 
+  POSTGRES_DB: POSTGRES_DB,
+  POSTGRES_PASSWORD: POSTGRES_PASSWORD, 
+  POSTGRES_HOST:POSTGRES_HOST,
+  dialect: 'postgres'
+}
+
+
+
+module.exports.PG_CONNECT_STRING = `
+postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`;
