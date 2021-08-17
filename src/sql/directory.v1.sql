@@ -11,6 +11,23 @@ DROP TABLE CATEGORY CASCADE;
 DROP TABLE MOVIES_CATEGORY_RELATION CASCADE;
 DROP TABLE user_features_userrelation CASCADE;
 
+
+-- if using postgress for sesion persistant storage 
+CREATE TABLE "session" (
+  "sid" varchar NOT NULL COLLATE "default",
+	"sess" json NOT NULL,
+	"expire" timestamp(6) NOT NULL
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+
+
+-- if using postgress for sesion persistant storage 
+
+
 CREATE TABLE postgres.USERS (
   id bigserial,
   user_username VARCHAR(50) UNIQUE,
