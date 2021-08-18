@@ -1,37 +1,42 @@
 const Sequelize = require('sequelize');
 const { MOVIES } = require('../config/database.tables');
+const CategoryModel = require('./category.model');
+const MovieCategoryRelationModel = require('./relations/movies-category.model');
 const sequelize = require('../database/database').bootstrap();
 
 const MovieModel = sequelize.define(MOVIES,{
-  movies_title: {
+  movie_title: {
     allowNull: false,
     type: Sequelize.STRING,
   },
-  movies_rating: {
+  movie_rating: {
     type: Sequelize.INTEGER,
   },
-  movies_description: {
+  like_count: {
+    type: Sequelize.INTEGER
+  },
+  movie_description: {
     type: Sequelize.STRING
   },
-  movies_release_date: {
+  movie_release_date: {
     type: Sequelize.DATE
   },
-  movies_url: {
+  movie_url: {
     type: Sequelize.STRING
   },
-  movies_thumbnail: {
+  movie_thumbnail: {
     type: Sequelize.STRING
   },
-  movies_created_at: {
+  created_at: {
     type: Sequelize.DATE
   },
-  movies_updated_at: {
+  updated_at: {
     type: Sequelize.DATE
   },
-  movies_created_by: {
+  created_by: {
     type: Sequelize.UUID
   },
-  movies_updated_by: {
+  updated_by: {
     type: Sequelize.UUID
   }
 },{ 
@@ -43,5 +48,18 @@ const MovieModel = sequelize.define(MOVIES,{
   timestamps: false,
   freezeTableName: true
 })
+
+MovieModel.belongsToMany(CategoryModel,{
+  through: MovieCategoryRelationModel,
+  foreignKey:'movie_id'
+})
+
+CategoryModel.belongsToMany(MovieModel,{
+  through: MovieCategoryRelationModel,
+  foreignKey:'category_id'
+})
+
+
+
 
 module.exports = MovieModel;

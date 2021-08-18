@@ -1,9 +1,28 @@
+const CategoryModel = require('../models/category.model')
+const CommentsModel = require('../models/comments.model')
+const FilmakingMembersModel = require('../models/filmaking-members.model')
+const LikeModel = require('../models/like.model')
 const MoviesModel = require('../models/movie.model')
+const ReviewsModel = require('../models/reviews.model')
+const UserModel = require('../models/user.model')
 
 module.exports  = {
   async getAllMovies (req,res){
     try {
-      const movies = await MoviesModel.findAll()
+      const movies = await MoviesModel.findAll({
+        include:[{
+          model:CategoryModel,
+          as:'categories'
+        },{
+          model:LikeModel
+        },{
+          model:CommentsModel
+        },{
+          model:FilmakingMembersModel
+        },{
+          model:ReviewsModel
+        },]
+      })
       res.json({
         data:movies
       })

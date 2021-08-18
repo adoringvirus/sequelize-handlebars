@@ -4,6 +4,12 @@ const { baseRoute } = require('./base.routes');
 
 
 const UserStatusRouter = Router();
-baseRoute(UserStatusRouter,UserStatusModel,'user-status','users/user-status')
+
+baseRoute(
+  UserStatusRouter,
+  UserStatusModel,
+  'user-status',
+  {isGetProtected:false}
+)
 
 module.exports = UserStatusRouter;

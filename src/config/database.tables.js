@@ -1,16 +1,17 @@
 module.exports = {
   USERS: 'users',
   USER_FEATURES : 'user_features',
-  USER_FEATURES_RELATION: 'user_features_relation',
+  USER_FEATURES_RELATION: 'user_features_users_relation',
   USER_ROLES: 'user_roles',
-  USER_STATUS: 'user_status',
+  USER_STATUS: 'user_statuses',
   REVIEWS: 'reviews',
-  CATEGORY: 'category', 
+  CATEGORY: 'categories', 
   COMMENTS: 'comments',
-  USERS_MOVIES_COMMENTS_RELATION:'users_movies_comments_relation',
-  USERS_MOVIES_REVIEWS_RELATION:'users_movies_reviews_relation',
+  LIKES: 'likes',
   MOVIES: 'movies',
-  MOVIES_CATEGORY_RELATION:'movies_category_relation',
+  MOVIES_CATEGORIES_RELATION:'movies_categories_relation',
   FILMAKING_MEMBERS: 'filmaking_members',
   FILMAKING_MEMBERS_ROLES: 'filmaking_members_roles',
+  FILMAKING_MEMBERS_AND_MEMBERS_ROLES_RELATION: 'filmaking_members_and_member_roles_relation',
+  FILMAKING_MEMBERS_AND_MOVIES_RELATION: 'filmaking_members_and_movies_relation'
 }

@@ -3,10 +3,10 @@ const { USER_FEATURES } = require('../config/database.tables');
 const sequelize = require('../database/database').bootstrap();
 
 const UserFeaturesModel = sequelize.define(USER_FEATURES,{
-  user_features_name: {
+  user_feature_name: {
     type: Sequelize.STRING
   },
-  user_features_description: {
+  user_feature_description: {
     type: Sequelize.STRING
   },
 },{

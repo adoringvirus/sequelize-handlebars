@@ -4,11 +4,11 @@ const { baseRoute } = require('./base.routes');
 
 
 const UserRolesRouter = Router();
+
 baseRoute(
   UserRolesRouter,
   UserRolesModel,
   'user-roles',
-  'users/user-roles'
 )
 
 module.exports = UserRolesRouter;

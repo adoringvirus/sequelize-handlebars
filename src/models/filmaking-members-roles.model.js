@@ -3,13 +3,13 @@ const { FILMAKING_MEMBERS_ROLES } = require('../config/database.tables');
 const sequelize = require('../database/database').bootstrap();
 
 const FilmakingMembersRolesModel = sequelize.define(FILMAKING_MEMBERS_ROLES,{
-  filmaking_members_role_name: {
+  filmaking_member_role_name: {
     type: Sequelize.STRING
   },
-  filmaking_members_role_description: {
+  filmaking_member_role_description: {
     type: Sequelize.STRING
   },
-  filmaking_members_role_thumbnail: {
+  filmaking_member_role_thumbnail: {
     type: Sequelize.STRING
   }
 

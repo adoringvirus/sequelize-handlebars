@@ -1,13 +1,13 @@
 const Sequelize = require('sequelize');
-const { COMMENTS } = require('../config/database.tables');
+const { LIKES } = require('../config/database.tables');
 const MovieModel = require('./movie.model');
 const sequelize = require('../database/database').bootstrap();
 
-const CommentsModel = sequelize.define(COMMENTS,{
-  comment_rating: {
+const LikeModel = sequelize.define(LIKES,{
+  user_id: {
     type: Sequelize.INTEGER
   },
-  comment: {
+  movie_id: {
     type: Sequelize.STRING
   },
   created_at: {
@@ -33,9 +33,10 @@ const CommentsModel = sequelize.define(COMMENTS,{
   underscored: true,
 })
 
-CommentsModel.belongsTo(MovieModel,{
+LikeModel.belongsTo(MovieModel,{
   foreignKey: 'movie_id',
 })
-MovieModel.hasMany(CommentsModel)
+MovieModel.hasMany(LikeModel);
 
-module.exports = CommentsModel;
+
+module.exports = LikeModel;

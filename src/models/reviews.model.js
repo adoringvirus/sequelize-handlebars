@@ -1,25 +1,25 @@
 const Sequelize = require('sequelize');
 const { REVIEWS } = require('../config/database.tables');
+const MovieModel = require('./movie.model');
 const sequelize = require('../database/database').bootstrap();
 
 const ReviewsModel = sequelize.define(REVIEWS,{
-  reviews_name: {
+  review_description: {
     type: Sequelize.STRING
   },
-  reviews_description: {
-    type: Sequelize.STRING
-  },
-  reviews_created_at:{
+  user_id: Sequelize.INTEGER,
+  movie_id: Sequelize.INTEGER,
+  created_at:{
     type: Sequelize.DATE
   },
-  reviews_updated_at:{
+  updated_at:{
     type: Sequelize.DATE
   },
-  reviews_created_by:{
-    type: Sequelize.UUID
+  created_by:{
+    type: Sequelize.INTEGER
   },
-  reviews_updated_by:{
-    type: Sequelize.UUID
+  updated_by:{
+    type: Sequelize.INTEGER
   },
 
 },{
@@ -29,7 +29,15 @@ const ReviewsModel = sequelize.define(REVIEWS,{
     },
   },
   timestamps: false,
-  freezeTableName: true
+  freezeTableName: true,
+  underscored:true
+});
+
+ReviewsModel.belongsTo(MovieModel,{
+  foreignKey:'movie_id'
+})
+MovieModel.hasMany(ReviewsModel,{
+  sourceKey:'id'
 })
 
 module.exports = ReviewsModel;
