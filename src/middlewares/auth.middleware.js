@@ -21,8 +21,8 @@ module.exports = {
     next 
   ){
     // * if there is no user 
-    req.user = req.session.passport.user;
     if(!req.user){return res.status(401).json({message: 'You are not authorized'})}  
+    req.user = req.session.passport.user;
 
     const {  user_status,user_role,user_features } = req.session.passport.user;
     
