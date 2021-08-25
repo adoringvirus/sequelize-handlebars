@@ -36,6 +36,9 @@ const UserModel = sequelize.define(USERS,{
   user_avatar: {
     type: Sequelize.STRING
   },
+  user_verify_token: {
+    type: Sequelize.STRING
+  },
   user_last_login_at: {
     type: Sequelize.DATE
   },

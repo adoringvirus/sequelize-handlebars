@@ -15,6 +15,7 @@ class sequelize {
       DBConfig.POSTGRES_PASSWORD, {
         host: DBConfig.POSTGRES_HOST,
         dialect: 'postgres',
+        logging: false, 
       },
     )
   }
