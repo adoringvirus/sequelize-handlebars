@@ -1,36 +1,25 @@
-const UserModel = require('../models/user.model');
-const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
-const UserStatusModel = require('../models/user-status.model');
-const UserRolesModel = require('../models/user-roles.model');
-const UserFeaturesModel = require('../models/user-features.model');
+const { findOneUser } = require('../services/user.service');
+const { isPasswordCorrect } = require('../utils/auth.util')
 
 const authenticateUser = async (req,user_email, user_password, done)=>{
-  try {
-    const user = await UserModel.findOne({
-      where:{
-        user_email:user_email
-      },
-      include: [UserStatusModel,UserRolesModel,UserFeaturesModel]
-    })
 
-    // * Compare incoming password with database one
-    // *
-    const isCorrectPassword = await bcrypt.compare(
-      user_password,
-      user.user_password
-    );
-    
-    // * if password is incorrect
-    if(!isCorrectPassword) { return done(null,false,{message:'wrong pass nigga'}) };
-    
-    // * Remove password from object
-    user.user_password = undefined;
+  const user = await findOneUser({user_email})
 
-    return done(null,user);
-  } catch (error) {
-    return done(error,{message:'nop'})
-  }
+  if(!user) { return done(error,{message:'nop'})}
+
+  const isCorrectPassword = isPasswordCorrect(
+    user.user_password,
+    user_password
+  )
+  
+  // * if password is incorrect
+  if(!isCorrectPassword) { return done(null,false,{message:'wrong pass nigga'}) };
+  
+  // * Remove password from object
+  user.user_password = undefined;
+
+  return done(null,user);
 }
 
 // * This is the information that will get save of the user cookie id
@@ -43,15 +32,11 @@ const _serializeUser = (user,done)=>{
 // * Once user information is saved 
 // * we do have access to the information or object we send in the above method
 const _deserializeUser = async (_user, done)=> {
-  try {
-    const user = await UserModel.findOne({where:{
-      id:_user.id
-    }});
-    // * You can return whatever you want to be used later on to retrieve user
-    return done(null,user.id)
-  } catch (error) {
-    return done(error,_user.id)
-  }
+  const user = await findOneUser({ id: _user.id })
+  if(!user) { return done(error,_user.id) }
+
+  // * You can return whatever you want to be used later on to retrieve user
+  return done(null,user.id)
 }
 
 module.exports = (
