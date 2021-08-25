@@ -56,6 +56,17 @@ class App {
     await Sequelize.initDatabase();
     this.app.use(AuthRouter)
     this.app.use(`${this.API_PREFIX}`,RootRouter)
+
+    // * 404 error
+    this.app.use(function(req,res){
+      res.status(404).json({error:'nop baby'});
+    });
+
+    // * 500 error
+    this.app.use(function(error, req, res, next) {
+      console.log(`error`, error)
+      res.status(500).send('500: Internal Server Error');
+    });
   }
 
   async init(){
