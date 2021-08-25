@@ -5,6 +5,7 @@ services:
     container_name: postgres-db
     volumes:
       - $PWD/db_data:/var/lib/postgresql/data 
+      - $PWD/src/sql/directory.v1.sql:/sql/directory.v1.sql
     environment: 
       POSTGRES_PASSWORD: 123456789
       POSTGRES_USER: postgres
