@@ -4,6 +4,7 @@ const crypto = require('crypto');
 module.exports =  async (_path)=>{
   const rsaKeys = crypto.generateKeyPairSync('rsa',{
     // The standard secure default length for RSA keys is 2048 bits
+    hash: "SHA-256",
     modulusLength: 2048,
     publicKeyEncoding: {
       type: "pkcs1", // "Public Key Cryptography Standards 1"
@@ -12,7 +13,7 @@ module.exports =  async (_path)=>{
     privateKeyEncoding: {
       type: "pkcs1", // "Public Key Cryptography Standards 1"
       format: "pem", // Most common formatting choice
-      passphrase: ''
+      // passphrase: ''
     },
   })
   
