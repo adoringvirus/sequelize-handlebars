@@ -2,8 +2,26 @@ const UserModel = require('../models/user.model');
 const UserRolesModel = require('../models/user-roles.model');
 const UserStatusModel = require('../models/user-status.model');
 const UserFeaturesModel = require('../models/user-features.model');
-const { nanoid } = require('nanoid')
+const { nanoid } = require('nanoid');
+
 module.exports = {
+  async findAllUsers(whereObject={}){
+    try {
+      const users = await UserModel.findAll({
+        where: whereObject,
+        include: [
+          UserRolesModel,
+          UserStatusModel,
+          UserFeaturesModel,
+        ]
+      });
+      if(users.length === 0) { return [] }
+      return users;
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  },
   async findOneUser(whereObject){
     try {
       const user = await UserModel.findOne({
@@ -20,7 +38,7 @@ module.exports = {
       return null
     }
   },
-  async createUser(userInfo){
+  async createOneUser(userInfo){
 
     const { 
       user_username,
@@ -58,20 +76,30 @@ module.exports = {
       return null
     }
   },
-  async updateUser(userInfo,whereObject){
-
-    const user = await UserModel.findOne({
-      where: whereObject,
-    });
-
-    await user.update(userInfo);
-    
+  async updateOneUser(userInfo,whereObject){
     try {
+      const user = await UserModel.findOne({
+        where: whereObject,
+      });
+
+      await user.update(userInfo);
+    
       user.user_password = undefined;
       return user
     } catch (error) {
       console.log(error)
       return null
+    }
+  },
+  async deleteOneUser(whereObject){
+    try {
+      const user = await UserModel.destroy({
+        where: whereObject
+      })
+      return user
+    } catch (error) {
+      console.log(`error`, error)
+      return null;
     }
   }
 }

@@ -1,10 +1,8 @@
-const CommentsModel = require('../models/comments.model')
-const LikeModel = require('../models/like.model')
-const ReviewsModel = require('../models/reviews.model')
-const UserFeaturesModel = require('../models/user-features.model')
-const UserRolesModel = require('../models/user-roles.model')
-const UserStatusModel = require('../models/user-status.model')
-const UsersModel = require('../models/user.model')
+const { 
+  findAllUsers, findOneUser, 
+  createOneUser, updateOneUser, 
+  deleteOneUser 
+} = require('../services/user.service')
 
 
 module.exports  = {
@@ -14,26 +12,15 @@ module.exports  = {
     /** @type {import('express').Response } */
     res
   ){
-    try {
-      const users = await UsersModel.findAndCountAll({
-        // include: [
-        //   UserRolesModel,
-        //   UserStatusModel,
-        //   UserFeaturesModel,
-        //   CommentsModel,
-        //   LikeModel,
-        //   ReviewsModel
-        // ],
-        // offset: 2,
-        // limit: 2
-      })
-      res.status(200).json({users:users})
-    } catch (error) {
-      console.log(`error`, error)
-      return res.status(500).json({
-        error
-      })
-    }
+    const users = await findAllUsers();
+
+    if(!users){ return res.status(400).json({
+      message:'An error occurred'
+    })}
+
+    if(users.length === 0) { return res.status(200).json({message:'No users yet'}) }
+
+    return res.status(200).json({users:users})
   },
   async getOneUser(
     /** @type {import('express').Request } */
@@ -42,24 +29,16 @@ module.exports  = {
     res
   ){
     const { id } = req.params;
+    const user = await findOneUser({ id:id })
 
-    try {
-      const user = UsersModel.findOne({
-        where:{
-          id:id
-        }
-      });
+    if(!user) { return res.status(400).json({
+      message:'No user found'
+    })}
 
-      res.status(200).json({
-        message:'',
-        data:user
-      })
-    } catch (error) {
-      res.status(400).json({
-        message:'',
-        error
-      })
-    }
+    return res.status(200).json({
+      message:'User found',
+      data:user
+    })
   },
   async createUser (
     /** @type {import('express').Request } */
@@ -67,39 +46,13 @@ module.exports  = {
     /** @type {import('express').Response } */
     res
   ){
-    const { 
-      user_username,
-      user_first_name,
-      user_last_name,
-      user_phone,
-      user_email,
-      user_password,
-      user_avatar
-    } = req.body;
-    // console.log(`object`, req.body)
-    // users_last_login_at
-    // users_last_ip_address
+    const createdUser = await createOneUser(req.body)
 
-    try {
-      const user = await UsersModel.create({
-        user_username,
-        user_first_name,
-        user_last_name,
-        user_phone,
-        user_email,
-        user_password,
-        user_avatar
-      })
-
-      res.status(201).json({
-        user
-      })
-    } catch (error) {
-      console.log(error)
-      res.status(400).json({
-        error: error
-      })
-    }
+    if(!createdUser) {return res.status(400).json({
+      message: 'Could not create user'
+    })}
+    
+    res.status(201).json({ message:'User created',data:createdUser})
   },
   async updateUser(
     /** @type {import('express').Request } */
@@ -108,32 +61,19 @@ module.exports  = {
     res
   ){
     const { id } = req.params;
-    const { } = req.body;
-
-    try {
-      const user = await UsersModel.findOne({
-        // attributes:[''],
-        where:{
-          id:id
-        }
-      })
+    const user = await updateOneUser({id:id})
   
-      if(!user) return res.status(400).json({
-        message:'User not found'
-      })
-      
-      user.update(req.body)
-      return res.status(200).json({
-        data:user
-      })
-    } catch (error) {
-      console.log(error)
-      res.status(400).json({
-        error
-      })
-    }
+    if(!user) return res.status(400).json({
+      message:'User not found'
+    })
+    
+    const updatedUser = await user.update(req.body)
+    return res.status(200).json({
+      message: 'User updated',
+      data: updatedUser
+    })
   },
-  deleteUser (
+  async deleteUser (
     /** @type {import('express').Request } */
     req,
     /** @type {import('express').Response } */
@@ -143,21 +83,10 @@ module.exports  = {
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     console.log(ip);
 
-    try {
-      const user = UsersModel.destroy({
-        where:{
-          id:id
-        }
-      })
-      res.status(200).json({
-        message:`movie ${id} deleted`,
-        movie:user
-      })
-    } catch (error) {
-      res.status(400).json({
-        message:'',
-        error:error
-      })
-    }
+    const deletedUser = await deleteOneUser({id:id})
+
+    if(!deletedUser){ return res.status(400).json({ message:`Could not find user`}) }
+    
+    return res.status(200).json({ message:`movie ${id} deleted`})
   }
 }
