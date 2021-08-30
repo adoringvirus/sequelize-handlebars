@@ -2,7 +2,9 @@ const { createUser, findOneUser } = require('../services/user.service');
 const jwt = require('jsonwebtoken');
 const os = require('os')
 const fs = require('fs-extra');
-const {decryptPrivate,encryptPublic} = require('../utils/encryptation.util')
+const nodemailer = require('nodemailer')
+const {decryptPrivate,encryptPublic} = require('../utils/encryptation.util');
+const { setTransporter } = require('../email/nodemailer');
 
 const public = fs.readFileSync(__dirname + "/id_rsa_priv.pem","utf8");
 const private = fs.readFileSync(__dirname + "/id_rsa_priv.pem","utf8");
@@ -45,9 +47,17 @@ module.exports  = {
       issuer: os.hostname(),
     });
 
+    const mailOptions = {
+      from: `tomerpacific@gmail.com`,
+      to: `wanders1995@hotmail.com`,
+      subject: 'Nodemailer Project',
+      text: `Click on the link to activate account ${jwtToken}`
+    }
+
+    await setTransporter(mailOptions).sendMail();
+
     res.status(201).json({
-      message: 'User registered',
-      data: jwtToken
+      message: 'User registered'
     })
   },
 
@@ -96,7 +106,7 @@ module.exports  = {
 
     const user = await findOneUser({user_email:userData.email});
 
-
+    
     if( userData.activation_code === user.user_verify_token){
       
       res.json({message: 'user activated'})
