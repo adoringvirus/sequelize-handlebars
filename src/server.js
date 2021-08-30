@@ -10,8 +10,8 @@ const flash = require('connect-flash');
 const AuthRouter = require('./routes/v1/auth.routes');
 const pgSession = require('connect-pg-simple')(session);
 const databaseConfig = require('./config/database.config');
+const { isSuperAdmin } = require('./middlewares/auth.middleware');
 const rdbStore = require('./redis/redis.store')(session);
-
 require('./authentication/passport')(passport)
 require('dotenv').config()
 
@@ -20,6 +20,9 @@ require('dotenv').config()
 //   conString: databaseConfig.PG_CONNECT_STRING,
 //   tableName: 'session'
 // })
+const statusMonitor = require('express-status-monitor')({ chartVisibility:{
+  statusCodes:true,
+}});
 
 class App {
   app = express();
@@ -30,7 +33,7 @@ class App {
 
   middleware(){
     const oneDay = 1000 * 60 * 60 * 24;
-
+    
     this.app.use(express.json());
     this.app.use(express.urlencoded({extended: true}));
     this.app.use(express.static(path.join(__dirname,'public')));
@@ -45,11 +48,13 @@ class App {
       cookie: {secure: false, maxAge: oneDay },
       store: rdbStore,
     }))
-
+    
     // * Initializing passport instance to add it to the req object
     // * and telling express to handle sessions with passport
     this.app.use(passport.initialize());
     this.app.use(passport.session())
+
+    this.app.get('/status',isSuperAdmin,statusMonitor.pageRoute)
   }
 
   async initRoutes (){
