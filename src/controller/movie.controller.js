@@ -1,70 +1,69 @@
-const CategoryModel = require('../models/category.model')
-const CommentsModel = require('../models/comments.model')
-const FilmakingMembersModel = require('../models/filmaking-members.model')
-const LikeModel = require('../models/like.model')
-const MoviesModel = require('../models/movie.model')
-const ReviewsModel = require('../models/reviews.model')
-const UserModel = require('../models/user.model')
+const MoviesModel = require('../models/movie.model');
+const { RESPONSES } = require('../responses/response');
+const { findOneMovie, findAllMovies, createOneMovie, updateOneMovie, deleteOneMovie } = require('../services/movie.service');
 
 module.exports  = {
   async getAllMovies (req,res){
-    try {
-      const movies = await MoviesModel.findAll({
-        include:[{
-          model:CategoryModel,
-          as:'categories'
-        },{
-          model:LikeModel
-        },{
-          model:CommentsModel
-        },{
-          model:FilmakingMembersModel
-        },{
-          model:ReviewsModel
-        },]
-      })
-      res.json({
-        data:movies
-      })
-    } catch (error) {
-      console.log(`error`, error)
-      return res.status(500).json({
-        error
-      })
-    }
+    // console.log(`req.user.id`, req.session.passport.user)
+    const movies = await findAllMovies()
+    if(!movies) { return RESPONSES.INTERNAL_ERROR(res,{
+      path: req.originalUrl,
+      code: 500,
+      message: 'Error trying to find movie',
+      data: null,
+    })}
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 200,
+      message: 'Movies Found',
+      data: movies,
+    })
   },
   async getOneMovie (req,res){
     const { id } = req.params;
-    try {
-      const movie = await MoviesModel.findOne({
-        where:{
-          id:id
-        }
-      })
-      res.status(200).json({
-        message:'',
-        data:movie
-      })
-    } catch (error) {
-      res.status(400).json({
-        message:'Could not find movie',
-        error: error
-      })
-    }
+    const movie = await findOneMovie({id:id});
+
+    if(Array.isArray(movie)){ return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 400,
+      message: 'Movie does not exist exist',
+      data: null,
+    })}
+    
+    if(!movie){ return RESPONSES.INTERNAL_ERROR(res,{
+      path: req.originalUrl,
+      code: 500,
+      message: 'An error ocurred trying to update the movie',
+      data: null,
+    })}
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 200,
+      message: `Movie ${ id } found`,
+      data: movie,
+    })
   },
   async createMovie (req,res){
-    const { } = req.body
-    try {
-      const newMovie = await MoviesModel.create(req.body,{
-        fields:['']
-      })
-      res.json({
-        message: 'Movie created',
-        data: newMovie
-      })
-    } catch (error) {
-      res.status(400).json(error)
-    }
+    const newMovie = await createOneMovie({
+      ...req.body,
+      created_by: req.user.id
+    });
+
+    
+    if(!newMovie){ return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 400,
+      message: 'Could not create movie',
+      data: null,
+    })}
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 201,
+      message: 'Movie created',
+      data: newMovie
+    })
   },
 
   async updateMovie (req,res){
@@ -72,53 +71,52 @@ module.exports  = {
     const { id } = req.params;
     const { } = req.body;
 
-    const movie = await MoviesModel.findOne({
-      // attributes:[''],
-      where:{
-        id:id
-      }
-    })
+    const updatedMovie = await updateOneMovie({
+      ...req.body,
+      updated_by:req.user.id
+    },{id:id});
 
-    if(!movie) res.status(400).json({
-      message:'User not found'
-    })
+    if(Array.isArray(updatedMovie)){ return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 400,
+      message: 'Movie does not exist',
+      data: null,
+    })}
 
-    
-    try {
-      movie.update(req.body)
-      res.status(200).json({
-        message:'',
-        data:movie
-      })
-    } catch (error) {
-      res.status(400).json({
-        message:'',
-        error
-      })
-    }
+    if(!updatedMovie) {return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 400,
+      message: 'Could not update movie',
+      data: null,
+    })}
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 200,
+      message: 'Movie updated',
+      data: updatedMovie
+    })
   },
 
-  deleteMovie (req,res){
+  async deleteMovie (req,res){
     const { id } = req.params;
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     console.log(ip);
 
-    try {
-      const movie = MoviesModel.destroy({
-        where:{
-          id:id
-        }
-      })
-      res.status(200).json({
-        message:`movie ${id} deleted`,
-        movie:movie
-      })
-    } catch (error) {
-      res.status(400).json({
-        message:'',
-        error:error
-      })
-    }
-  }
+    const deletedMovie = await  deleteOneMovie({id:id})
+    
+    if(!deletedMovie){ return RESPONSES.INTERNAL_ERROR(res,{
+      path: req.originalUrl,
+      code: 400,
+      message: 'Could not update movie',
+      data: null,
+    })}
 
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 200,
+      message: 'Movie deleted',
+      data: deletedMovie,
+    })
+  }
 }
