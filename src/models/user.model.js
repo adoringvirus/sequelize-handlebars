@@ -28,6 +28,10 @@ const UserModel = sequelize.define(USERS,{
   user_email:{
     type: Sequelize.STRING,
     allowNull: false,
+    validate:{
+      isEmail: true,
+    },
+    unique: true
   },
   user_password: {
     allowNull: false,
@@ -83,9 +87,11 @@ const UserModel = sequelize.define(USERS,{
   // instanceMethods:{
   //   // validPassword
   // },
-  timestamps: false,
+  timestamps: true,
   freezeTableName: true,
-  underscored: true
+  underscored: true,
+  updatedAt: "updated_at",
+  createdAt: "created_at"
 })
 
 

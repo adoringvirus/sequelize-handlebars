@@ -40,13 +40,11 @@ const MovieModel = sequelize.define(MOVIES,{
     type: Sequelize.UUID
   }
 },{ 
-  defaultScope: {
-    attributes: { 
-      exclude: ['createdAt','updatedAt'] 
-    }
-  },
-  timestamps: false,
-  freezeTableName: true
+  timestamps: true,
+  freezeTableName: true,
+  underscored: true,
+  updatedAt: "updated_at",
+  createdAt: "created_at"
 })
 
 MovieModel.belongsToMany(CategoryModel,{
