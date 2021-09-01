@@ -1,6 +1,6 @@
 const CommentsModel = require("../models/comments.model");
-const MovieModel = require("../models/movie.model");
-
+const MovieModel = require("../models/movie/movie.model");
+const { RESPONSES } = require('../responses/response')
 
 module.exports  = {
   async getAllCommentsFromMovie (

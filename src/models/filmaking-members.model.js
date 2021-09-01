@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const { FILMAKING_MEMBERS } = require('../config/database.tables');
 const FilmakingMembersRolesModel = require('./filmaking-members-roles.model');
-const MovieModel = require('./movie.model');
+const MovieModel = require('./movie/movie.model');
 const FilmakingMembersMoviesRelationModel = require('./relations/filmaking-member-movies.model');
 const FilmakingMembersMemberRolesRelationModel = require('./relations/filmaking-members-roles.model');
 const sequelize = require('../database/database').bootstrap();

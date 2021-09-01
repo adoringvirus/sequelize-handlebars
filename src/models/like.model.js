@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { LIKES } = require('../config/database.tables');
-const MovieModel = require('./movie.model');
+const MovieModel = require('./movie/movie.model');
 const sequelize = require('../database/database').bootstrap();
 
 const LikeModel = sequelize.define(LIKES,{

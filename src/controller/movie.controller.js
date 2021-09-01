@@ -1,10 +1,8 @@
-const MoviesModel = require('../models/movie.model');
 const { RESPONSES } = require('../responses/response');
 const { findOneMovie, findAllMovies, createOneMovie, updateOneMovie, deleteOneMovie } = require('../services/movie.service');
 
 module.exports  = {
   async getAllMovies (req,res){
-    // console.log(`req.user.id`, req.session.passport.user)
     const movies = await findAllMovies()
     if(!movies) { return RESPONSES.INTERNAL_ERROR(res,{
       path: req.originalUrl,
@@ -37,6 +35,7 @@ module.exports  = {
       message: 'An error ocurred trying to update the movie',
       data: null,
     })}
+
     return RESPONSES.OK(res,{
       path: req.originalUrl,
       code: 200,

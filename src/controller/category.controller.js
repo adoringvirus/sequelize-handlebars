@@ -1,5 +1,5 @@
 const CategoryModel = require("../models/category.model");
-const MovieModel = require("../models/movie.model");
+const MovieModel = require("../models/movie/movie.model");
 const MovieCategoryRelationModel = require("../models/relations/movies-category.model");
 
 module.exports  = {

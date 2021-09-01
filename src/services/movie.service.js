@@ -2,7 +2,7 @@ const ReviewsModel = require('../models/reviews.model');
 const CommentsModel = require('../models/comments.model');
 const LikeModel = require('../models/like.model');
 const FilmakingMembersModel = require('../models/filmaking-members.model');
-const MovieModel = require('../models/movie.model');
+const MovieModel = require('../models/movie/movie.model');
 const CategoryModel = require('../models/category.model');
 
 module.exports = {
