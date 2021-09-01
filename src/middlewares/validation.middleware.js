@@ -18,4 +18,20 @@ const isValidBody = (schema)=> async (req,res,next)=>{
   }
 }
 
-module.exports = isValidBody
+const isParamValid = (req,res,next)=>{
+  const { params,originalUrl } = req;
+
+  for (const paramKey in params) {
+    if(isNaN(params[paramKey])){ return RESPONSES.BAD_REQUEST(res,{
+      path: originalUrl,
+      code: 400,
+      message: `Parameter ${paramKey}  must be a number`,
+    })}
+  }
+  return next();
+}
+
+module.exports = {
+  isValidBody,
+  isParamValid
+}
