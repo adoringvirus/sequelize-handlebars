@@ -1,5 +1,6 @@
 const { baseController } = require('../../controller/base.controller');
 const { isSuperAdmin } = require('../../middlewares/auth.middleware');
+const { isParamValid } = require('../../middlewares/validation.middleware');
 
 const defaultOptions = {
   isGetProtected: true,
@@ -34,9 +35,9 @@ exports.baseRoute = (router,model,modelName,routeOptions=defaultOptions)=>{
 
   // * get one model
   if( combinedRouteOptions.isGetOneProtected ){
-    router.get(`/${modelName}/:id`,isSuperAdmin,getOneModel);
+    router.get(`/${modelName}/:id`,isParamValid,isSuperAdmin,getOneModel);
   }else{
-    router.get(`/${modelName}/:id`,getOneModel);
+    router.get(`/${modelName}/:id`,isParamValid,getOneModel);
   }
 
   // * create one model
@@ -48,16 +49,16 @@ exports.baseRoute = (router,model,modelName,routeOptions=defaultOptions)=>{
 
   // * update model
   if( combinedRouteOptions.isPutProtected ){
-    router.put(`/${modelName}/:id`,isSuperAdmin, updateModel);
+    router.put(`/${modelName}/:id`,isParamValid,isSuperAdmin, updateModel);
   }else{
-    router.put(`/${modelName}/:id`, updateModel);
+    router.put(`/${modelName}/:id`,isParamValid, updateModel);
   }
 
   // * delete model
   if( combinedRouteOptions.isDeleteProtected ){
-    router.delete(`/${modelName}/:id`,isSuperAdmin,deleteModel);
+    router.delete(`/${modelName}/:id`,isParamValid,isSuperAdmin,deleteModel);
   }else{
-    router.delete(`/${modelName}/:id`, deleteModel);
+    router.delete(`/${modelName}/:id`,isParamValid, deleteModel);
   }
 
   return router;

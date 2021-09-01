@@ -1,7 +1,8 @@
 const { Router } = require('express');
 const { getAllCategoriesFromMovie, assignCategoryToMovie, unsignedCategoryFromMovie } = require('../../controller/category.controller');
+const { isParamValid } = require('../../middlewares/validation.middleware');
 const CategoryModel = require('../../models/category.model');
-const MovieModel = require('../../models/movie.model');
+const MovieModel = require('../../models/movie/movie.model');
 const { baseRoute } = require('./base.routes');
 
 
@@ -19,9 +20,9 @@ CategoryRouter.get('/movies/categories',async (req,res)=>{
   }
 })
 
-CategoryRouter.post('/movies/:movieId/categories/:categoryId',assignCategoryToMovie);
-CategoryRouter.delete('/movies/:movieId/categories/:categoryId',unsignedCategoryFromMovie);
+CategoryRouter.post('/movies/:movieId/categories/:categoryId',isParamValid,assignCategoryToMovie);
+CategoryRouter.delete('/movies/:movieId/categories/:categoryId',isParamValid,unsignedCategoryFromMovie);
 
-baseRoute(CategoryRouter,CategoryModel,'category','categories')
+baseRoute(CategoryRouter,CategoryModel,'categories')
 
 module.exports = CategoryRouter;

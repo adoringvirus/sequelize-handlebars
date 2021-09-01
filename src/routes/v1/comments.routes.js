@@ -2,15 +2,16 @@ const { Router } = require('express');
 const CommentsModel = require('../../models/comments.model');
 const { baseRoute } = require('./base.routes');
 const commentController = require('../../controller/comment.controller');
+const { isParamValid } = require('../../middlewares/validation.middleware');
 
 const CommentsRouter = Router();
 const BASE_ROUTE = `/movies/:movieId/comments`;
 
-CommentsRouter.get(`${BASE_ROUTE}`,commentController.getAllCommentsFromMovie);
-CommentsRouter.get(`${BASE_ROUTE}/:commentId`,commentController.getOneCommentFromMovie);
-CommentsRouter.post(`${BASE_ROUTE}`,commentController.creteCommentFromMovie);
-CommentsRouter.put(`${BASE_ROUTE}/:commentId`,commentController.updateCommentFromMovie);
-CommentsRouter.delete(`${BASE_ROUTE}/:commentId`,commentController.deleteCommentFromMovie);
+CommentsRouter.get(`${BASE_ROUTE}`,isParamValid,commentController.getAllCommentsFromMovie);
+CommentsRouter.get(`${BASE_ROUTE}/:commentId`,isParamValid,commentController.getOneCommentFromMovie);
+CommentsRouter.post(`${BASE_ROUTE}`,isParamValid,commentController.creteCommentFromMovie);
+CommentsRouter.put(`${BASE_ROUTE}/:commentId`,isParamValid,commentController.updateCommentFromMovie);
+CommentsRouter.delete(`${BASE_ROUTE}/:commentId`,isParamValid,commentController.deleteCommentFromMovie);
 
 baseRoute(CommentsRouter,CommentsModel,'comments')
 
