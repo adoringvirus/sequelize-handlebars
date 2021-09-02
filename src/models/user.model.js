@@ -63,10 +63,10 @@ const UserModel = sequelize.define(USERS,{
     defaultValue: Sequelize.NOW 
   },
   created_by: {
-    type: Sequelize.DATE
+    type: Sequelize.INTEGER
   },
   updated_by: {
-    type: Sequelize.DATE
+    type: Sequelize.INTEGER
   }
 },{ 
   getterMethods: {
@@ -87,7 +87,7 @@ const UserModel = sequelize.define(USERS,{
   // instanceMethods:{
   //   // validPassword
   // },
-  timestamps: true,
+  timestamps: false,
   freezeTableName: true,
   underscored: true,
   updatedAt: "updated_at",
