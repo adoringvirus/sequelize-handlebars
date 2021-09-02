@@ -32,7 +32,7 @@ module.exports = {
 
     if( !req.isAuthenticated() ) { return res.status(401) };
     if( userStatus !== 'active' ) { return res.json({message:'User is Inactive'}) };
-    if( userRole !== 'superadmin' ) { return res.json({message:'User is not admin'}) };
+    if( userRole !== 'superadmin' ) { return res.json({message:'User is not super-admin'}) };
     
     next();
   }
