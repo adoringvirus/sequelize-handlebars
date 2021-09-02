@@ -1,105 +1,127 @@
+const { RESPONSES } = require("../responses/response");
+const { findAllEntities, findOneEntity, createOneEntity, updateOneEntity, deleteOneEntity } = require("../services/base.service")
 
 exports.baseController  = (_model,_modelName)=> {
 
   return {
     async getAllModels (req,res){
-      try {
-        const models = await _model.findAll()
-        res.json({
-          data:models
-        })
-      } catch (error) {
-        console.log(`error`, error)
-        return res.status(500).json({
-          error
-        })
-      }
+
+      const allModels = await findAllEntities(_model);
+
+      if(!allModels){ return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 400,
+        message: `An error ocurred trying to find ${_modelName} `,
+        data: null,
+      })}
+
+      if(allModels.length === 0) return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 400,
+        message: `No ${_modelName} yet`,
+        data: [],
+      })
+
+      return RESPONSES.OK(res,{
+        path: req.originalUrl,
+        code: 200,
+        message: `${_modelName} found`,
+        data: allModels,
+      })
+
     },
     async getOneModel (req,res){
       const { id } = req.params;
-      try {
-        const model = await _model.findOne({
-          where:{
-            id:id
-          }
-        })
-        res.status(200).json({
-          message:'',
-          data:model
-        })
-      } catch (error) {
-        res.status(400).json({
-          message:`Could not find ${_modelName}`,
-          error: error
-        })
-      }
+      const foundModel = await findOneEntity(_model,{id:id});
+
+      if(!foundModel){ return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 400,
+        message: `An error ocurred trying to find ${_modelName} `,
+        data: null,
+      })}
+
+      if(foundModel.length === 0) return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 400,
+        message: `${_modelName} #${id} does not exist`,
+      })
+
+      return RESPONSES.OK(res,{
+        path: req.originalUrl,
+        code: 200,
+        message: `${_modelName} #${id} found`,
+        data: foundModel,
+      })
     },
     async createModel (req,res){
-      try {
-        const newModel = await _model.create(req.body,{
-          // fields:['']
-        })
-        res.json({
-          message: `${_modelName} created`,
-          data: newModel
-        })
-      } catch (error) {
-        res.status(400).json(error)
-      }
+      const createdModel = await createOneEntity(_model,req.body);
+
+      if(!createdModel){ return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 400,
+        message: `An error ocurred trying to create ${_modelName} `,
+        data: null,
+      })}
+
+      return RESPONSES.OK(res,{
+        path: req.originalUrl,
+        code: 201,
+        message: `${_modelName} created`,
+        data: createdModel,
+      })
     },
   
     async updateModel (req,res){
-      const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
       const { id } = req.params;
-      const { } = req.body;
-  
-      const model = await _model.findOne({
-        // attributes:[''],
-        where:{
-          id:id
-        }
+      const updatedModel = await updateOneEntity(_model, req.body, {id:id});
+
+      if(!updatedModel){ return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 400,
+        message: `An error ocurred trying to update ${_modelName}`,
+        data: null,
+      })}
+
+      if(updatedModel.length === 0) return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 400,
+        message: `${_modelName} #${id} does not exist`,
       })
-  
-      if(!model) res.status(400).json({
-        message:`${_modelName} not found`
-      })
-  
-      
-      try {
-        model.update(req.body);
-        res.status(200).json({
-          message:'',
-          data:model
-        })
-      } catch (error) {
-        res.status(400).json({
-          message:'',
-          error
-        })
-      }
+
+      return RESPONSES.OK(res,{
+        path: req.originalUrl,
+        code: 200,
+        message: `${_modelName} #${id} found`,
+        data: updatedModel,
+      });
     },
   
     async deleteModel(req,res){
       const { id } = req.params;
       const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
       console.log(ip);
-  
-      try {
-        const model = await _model.destroy({
-          where:{
-            id:id
-          }
-        })
-        res.status(200).json({
-          message:`${_modelName} ${id} deleted`,
-          data:model
-        })
-      } catch (error) {
-        res.status(400).json({
-          message:'',
-          error:error
-        })
-      }
+      const updatedModel = await deleteOneEntity(_model, req.body, {id:id});
+
+      if(!updatedModel){ return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 400,
+        message: `An error ocurred trying to delete ${_modelName}`,
+        data: null,
+      })}
+
+      if(updatedModel.length === 0) return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 400,
+        message: `${_modelName} #${id} does not exist`,
+      })
+
+      return RESPONSES.OK(res,{
+        path: req.originalUrl,
+        code: 200,
+        message: `${_modelName} #${id} deleted`,
+        data: updatedModel,
+      });
     }
   }
 

@@ -2,7 +2,6 @@ const UserModel = require('../models/user.model');
 const UserRolesModel = require('../models/user-roles.model');
 const UserStatusModel = require('../models/user-status.model');
 const UserFeaturesModel = require('../models/user-features.model');
-const { nanoid } = require('nanoid');
 
 module.exports = {
   async findAllUsers(whereObject={}){
@@ -39,35 +38,21 @@ module.exports = {
     }
   },
   async createOneUser(userInfo){
-
-    const { 
-      user_username,
-      user_first_name,
-      user_last_name,
-      user_phone,
-      user_email,
-      user_password,
-      user_avatar,
-      user_verify_email,
-      role_id = 2, // * Inactive by default
-      status_id = 2, // * user by default
-      user_verify_token = nanoid()
-    } = userInfo;
-    
     try {
-      
       const user = await UserModel.create({
-        user_username,
-        user_first_name,
-        user_last_name,
-        user_phone,
-        user_email,
-        user_password,
-        user_avatar,
-        user_verify_token,
-        status_id,
-        role_id
+        user_username: userInfo.user_username,
+        user_first_name: userInfo.user_first_name,
+        user_last_name: userInfo.user_last_name,
+        user_phone: userInfo.user_phone,
+        user_email: userInfo.user_phone,
+        user_password: userInfo.user_password,
+        user_avatar: userInfo.user_avatar,
+        user_verify_token: userInfo.user_verify_token,
+        status_id: userInfo.status_id,
+        role_id: userInfo.role_id,
+        created_by: userInfo.created_by
       })
+      
       user.user_password = undefined;
 
       return user
@@ -82,7 +67,21 @@ module.exports = {
         where: whereObject,
       });
 
-      await user.update(userInfo);
+      if(!user){ return [] }
+
+      await user.update({
+        user_username: userInfo.user_username,
+        user_first_name: userInfo.user_first_name,
+        user_last_name: userInfo.user_last_name,
+        user_phone: userInfo.user_phone,
+        user_email: userInfo.user_phone,
+        user_password: userInfo.user_password,
+        user_avatar: userInfo.user_avatar,
+        user_verify_token: userInfo.user_verify_token,
+        status_id: userInfo.status_id,
+        role_id: userInfo.role_id,
+        updated_by: userInfo.updated_by
+      });
     
       user.user_password = undefined;
       return user
@@ -93,12 +92,14 @@ module.exports = {
   },
   async deleteOneUser(whereObject){
     try {
-      const user = await UserModel.destroy({
+      const deletedUser = await UserModel.destroy({
         where: whereObject
       })
-      return user
+
+      if(!deletedUser){ return [] }
+      return deletedUser
     } catch (error) {
-      console.log(`error`, error)
+      console.log(`error`, error.original)
       return null;
     }
   }

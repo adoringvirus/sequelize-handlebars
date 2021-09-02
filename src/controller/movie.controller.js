@@ -75,7 +75,7 @@ module.exports  = {
       updated_by:req.user.id
     },{id:id});
 
-    if(Array.isArray(updatedMovie)){ return RESPONSES.BAD_REQUEST(res,{
+    if(updatedMovie.length === 0){ return RESPONSES.BAD_REQUEST(res,{
       path: req.originalUrl,
       code: 400,
       message: 'Movie does not exist',
@@ -108,6 +108,13 @@ module.exports  = {
       path: req.originalUrl,
       code: 400,
       message: 'Could not update movie',
+      data: null,
+    })}
+
+    if(deletedMovie.length === 0){ return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 400,
+      message: 'Could not find movie',
       data: null,
     })}
 

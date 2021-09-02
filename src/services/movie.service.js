@@ -50,26 +50,15 @@ module.exports = {
   },
   async createOneMovie(movieInfo){
 
-    const { 
-      movie_title,
-      movie_rating ,
-      movie_description,
-      movie_release_date,
-      movie_url,
-      movie_thumbnail,
-      created_by 
-    } = movieInfo;
-    
     try {
-      
       const movie = await MovieModel.create({
-        movie_title,
-        movie_rating ,
-        movie_description,
-        movie_release_date,
-        movie_url,
-        movie_thumbnail,
-        created_by
+        movie_title: movieInfo.movie_title,
+        movie_rating: movieInfo.movie_rating ,
+        movie_description: movieInfo.movie_description,
+        movie_release_date: movieInfo.movie_release_date,
+        movie_url: movieInfo.movie_url,
+        movie_thumbnail: movieInfo.movie_thumbnail,
+        created_by: movieInfo.created_by
       })
 
       return movie
@@ -83,8 +72,18 @@ module.exports = {
       const movie = await MovieModel.findOne({
         where: whereObject,
       });
-      if(!movie){return []}
-      await movie.update(movieInfo);
+
+      if(!movie){ return [] }
+
+      await movie.update({
+        movie_title: movieInfo.movie_title,
+        movie_rating: movieInfo.movie_rating ,
+        movie_description: movieInfo.movie_description,
+        movie_release_date: movieInfo.movie_release_date,
+        movie_url: movieInfo.movie_url,
+        movie_thumbnail: movieInfo.movie_thumbnail,
+        updated_by: movieInfo.updated_by
+      });
 
       return movie
     } catch (error) {
@@ -94,9 +93,9 @@ module.exports = {
   },
   async deleteOneMovie(whereObject){
     try {
-      const movie = await MovieModel.destroy({
-        where: whereObject
-      })
+      const movie = await MovieModel.destroy({ where: whereObject })
+      if(!movie){ return [] }
+
       return movie
     } catch (error) {
       console.log(`error`, error)

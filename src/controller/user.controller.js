@@ -1,3 +1,4 @@
+const { RESPONSES } = require('../responses/response');
 const { 
   findAllUsers, findOneUser, 
   createOneUser, updateOneUser, 
@@ -14,13 +15,26 @@ module.exports  = {
   ){
     const users = await findAllUsers();
 
-    if(!users){ return res.status(400).json({
-      message:'An error occurred'
+    if(!users){ return RESPONSES.INTERNAL_ERROR(res,{
+      path: req.originalUrl,
+      code: 500,
+      data: null,
+      message: 'Error trying to create user',
     })}
 
-    if(users.length === 0) { return res.status(200).json({message:'No users yet'}) }
+    if(users.length === 0) { return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 200,
+      data: [],
+      message: 'No users yet',
+    })}
 
-    return res.status(200).json({users:users})
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 200,
+      data: users,
+      message: 'Users found',
+    })
   },
   async getOneUser(
     /** @type {import('express').Request } */
@@ -31,13 +45,20 @@ module.exports  = {
     const { id } = req.params;
     const user = await findOneUser({ id:id })
 
-    if(!user) { return res.status(400).json({
-      message:'No user found'
+    if(!user) { return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 400,
+      data: null,
+      message: 'No user found',
     })}
 
-    return res.status(200).json({
-      message:'User found',
-      data:user
+    user.user_password = undefined;
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 200,
+      data: user,
+      message: 'User found',
     })
   },
   async createUser (
@@ -46,13 +67,25 @@ module.exports  = {
     /** @type {import('express').Response } */
     res
   ){
-    const createdUser = await createOneUser(req.body)
+    const createdUser = await createOneUser({
+      ...req.body,
+      created_by:req.user.id
+    })
 
-    if(!createdUser) {return res.status(400).json({
-      message: 'Could not create user'
-    })}
+    if(!createdUser) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 400,
+      data: null,
+      message: 'Could not create user',
+    })
     
-    res.status(201).json({ message:'User created',data:createdUser})
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 201,
+      data: createdUser,
+      message: 'User created',
+    })
+
   },
   async updateUser(
     /** @type {import('express').Request } */
@@ -61,16 +94,30 @@ module.exports  = {
     res
   ){
     const { id } = req.params;
-    const user = await updateOneUser({id:id})
-  
-    if(!user) return res.status(400).json({
-      message:'User not found'
+    const updatedUser = await updateOneUser({
+      ...req.body,
+      updated_by:req.user.id
+    },{id:id})
+    
+    if(!updatedUser) return RESPONSES.INTERNAL_ERROR(res,{
+      path: req.originalUrl,
+      code: 400,
+      data: null,
+      message: 'Could not update user',
     })
     
-    const updatedUser = await user.update(req.body)
-    return res.status(200).json({
+    if(updatedUser.length === 0){ return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 400,
+      data: null,
+      message: 'No user found',
+    })}
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 200,
       message: 'User updated',
-      data: updatedUser
+      data: updateOneUser,
     })
   },
   async deleteUser (
@@ -85,8 +132,25 @@ module.exports  = {
 
     const deletedUser = await deleteOneUser({id:id})
 
-    if(!deletedUser){ return res.status(400).json({ message:`Could not find user`}) }
+    if(!deletedUser){ return RESPONSES.INTERNAL_ERROR(res,{
+      path: req.originalUrl,
+      code: 400,
+      data: null,
+      message: 'Could not delete user',
+    })}
     
-    return res.status(200).json({ message:`movie ${id} deleted`})
+    if(deletedUser.length === 0){ return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 400,
+      data: null,
+      message: 'User does not exist',
+    })}
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 200,
+      message: 'User deleted',
+      data: updateOneUser
+    })
   }
 }

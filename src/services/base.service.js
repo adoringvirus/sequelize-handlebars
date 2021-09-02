@@ -2,9 +2,7 @@
 module.exports = {
   async findAllEntities(EntityModel,whereObject={}){
     try {
-      const entities = await EntityModel.findAll({
-        where: whereObject,
-      });
+      const entities = await EntityModel.findAll();
       if(entities.length === 0) { return [] }
       return entities;
     } catch (error) {
@@ -17,6 +15,9 @@ module.exports = {
       const entity = await EntityModel.findOne({
         where: whereObject
       });
+
+      if(!entity) return []
+
       return entity;
     } catch (error) {
       console.log(error)
@@ -40,6 +41,8 @@ module.exports = {
         where: whereObject,
       });
 
+      if(!entity) return []
+
       const createdEntity = await entity.update(entityInfo);
 
       return createdEntity
@@ -52,7 +55,10 @@ module.exports = {
     try {
       const deletedEntity = await EntityModel.destroy({
         where: whereObject
-      })
+      });
+
+      if(!deletedEntity) return []
+
       return deletedEntity
     } catch (error) {
       console.log(`error`, error)
