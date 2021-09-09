@@ -1,6 +1,4 @@
 const { Router } = require('express');
-const { isParamValid } = require('../../middlewares/validation.middleware');
-
 const V1RootRouter = Router();
 
 V1RootRouter.use( require('./user-status.routes') );
