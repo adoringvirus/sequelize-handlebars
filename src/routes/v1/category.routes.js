@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { getAllCategoriesFromMovie, assignCategoryToMovie, unsignedCategoryFromMovie } = require('../../controller/category.controller');
 const { isParamValid } = require('../../middlewares/validation.middleware');
-const CategoryModel = require('../../models/category.model');
+const CategoryModel = require('../../models/category/category.model');
 const MovieModel = require('../../models/movie/movie.model');
 const { baseRoute } = require('./base.routes');
 

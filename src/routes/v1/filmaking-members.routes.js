@@ -5,7 +5,7 @@ const {
 } = require('../../controller/filmaking-member.controller');
 const { isParamValid } = require('../../middlewares/validation.middleware');
 
-const FilmakingMembersModel = require('../../models/filmaking-members.model');
+const FilmakingMembersModel = require('../../models/filmaking-members/filmaking-members.model');
 const { baseRoute } = require('./base.routes');
 
 

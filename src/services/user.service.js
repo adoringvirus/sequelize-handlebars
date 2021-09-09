@@ -1,7 +1,7 @@
-const UserModel = require('../models/user.model');
-const UserRolesModel = require('../models/user-roles.model');
-const UserStatusModel = require('../models/user-status.model');
-const UserFeaturesModel = require('../models/user-features.model');
+const UserModel = require('../models/user/user.model');
+const UserRolesModel = require('../models/user-roles/user-roles.model');
+const UserStatusModel = require('../models/user-status/user-status.model');
+const UserFeaturesModel = require('../models/user-features/user-features.model');
 
 module.exports = {
   async findAllUsers(whereObject={}){

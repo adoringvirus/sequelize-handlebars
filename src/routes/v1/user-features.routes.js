@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { unsignedFeatureFromUser, assignFeatureToUser } = require('../../controller/feature.controller');
 const { isParamValid } = require('../../middlewares/validation.middleware');
-const UserFeaturesModel = require('../../models/user-features.model');
+const UserFeaturesModel = require('../../models/user-features/user-features.model');
 const { baseRoute } = require('./base.routes');
 
 

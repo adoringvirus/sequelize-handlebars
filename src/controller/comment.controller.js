@@ -1,4 +1,4 @@
-const CommentsModel = require("../models/comments.model");
+const CommentsModel = require("../models/comments/comments.model");
 const MovieModel = require("../models/movie/movie.model");
 const { RESPONSES } = require('../responses/response')
 

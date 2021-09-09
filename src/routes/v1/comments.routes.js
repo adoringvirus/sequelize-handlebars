@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const CommentsModel = require('../../models/comments.model');
+const CommentsModel = require('../../models/comments/comments.model');
 const { baseRoute } = require('./base.routes');
 const commentController = require('../../controller/comment.controller');
 const { isParamValid } = require('../../middlewares/validation.middleware');

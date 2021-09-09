@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const UserRolesModel = require('../../models/user-roles.model');
+const UserRolesModel = require('../../models/user-roles/user-roles.model');
 const { baseRoute } = require('./base.routes');
 
 

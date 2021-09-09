@@ -1,20 +1,11 @@
-const Sequelize = require('sequelize');
-const { FILMAKING_MEMBERS_AND_MOVIES_RELATION } = require('../../config/database.tables');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../../database/database').bootstrap();
 
-const FilmakingMembersMoviesRelationModel = sequelize.define(FILMAKING_MEMBERS_AND_MOVIES_RELATION,{
-  filmaking_member_id: {
-    type: Sequelize.INTEGER,
-  },
-  movie_id: {
-    type: Sequelize.INTEGER,
-  }
+const FilmakingMembersMoviesRelationModel = sequelize.define(
+  'filmaking_members_and_movies_relation',{
+  filmaking_member_id: DataTypes.INTEGER,
+  movie_id: DataTypes.INTEGER,
 },{
-  defaultScope: {
-    attributes: { 
-      exclude: ['createdAt','updatedAt'] 
-    },
-  },
   timestamps: false,
   freezeTableName: true
 })

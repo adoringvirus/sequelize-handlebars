@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const FilmakingMembersRolesModel = require('../../models/filmaking-members-roles.model');
+const FilmakingMembersRolesModel = require('../../models/filmaking-member-roles/filmaking-members-roles.model');
 const { baseRoute } = require('./base.routes');
 
 

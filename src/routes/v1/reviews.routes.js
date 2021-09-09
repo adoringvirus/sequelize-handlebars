@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { getAllReviewsFromMovie, getOneReviewFromMovie, createReviewFromMovie, updateReviewFromMovie, deleteReviewFromMovie } = require('../../controller/review.controller');
 const { isParamValid } = require('../../middlewares/validation.middleware');
-const ReviewsModel = require('../../models/reviews.model');
+const ReviewsModel = require('../../models/reviews/reviews.model');
 const { baseRoute } = require('./base.routes');
 
 

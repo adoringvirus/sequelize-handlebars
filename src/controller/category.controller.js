@@ -1,4 +1,4 @@
-const CategoryModel = require("../models/category.model");
+const CategoryModel = require("../models/category/category.model");
 const MovieModel = require("../models/movie/movie.model");
 const MovieCategoryRelationModel = require("../models/relations/movies-category.model");
 

@@ -1,9 +1,9 @@
-const ReviewsModel = require('../models/reviews.model');
-const CommentsModel = require('../models/comments.model');
-const LikeModel = require('../models/like.model');
-const FilmakingMembersModel = require('../models/filmaking-members.model');
+const ReviewsModel = require('../models/reviews/reviews.model');
+const CommentsModel = require('../models/comments/comments.model');
+const LikeModel = require('../models/like/like.model');
+const FilmakingMembersModel = require('../models/filmaking-members/filmaking-members.model');
 const MovieModel = require('../models/movie/movie.model');
-const CategoryModel = require('../models/category.model');
+const CategoryModel = require('../models/category/category.model');
 
 module.exports = {
   async findAllMovies(whereObject={}){

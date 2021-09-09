@@ -19,7 +19,7 @@ module.exports  = {
       path: req.originalUrl,
       code: 500,
       data: null,
-      message: 'Error trying to create user',
+      message: 'Error trying to get all user',
     })}
 
     if(users.length === 0) { return RESPONSES.OK(res,{

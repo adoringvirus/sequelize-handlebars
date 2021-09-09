@@ -1,5 +1,5 @@
 const MovieModel = require("../models/movie/movie.model");
-const ReviewsModel = require("../models/reviews.model");
+const ReviewsModel = require("../models/reviews/reviews.model");
 
 
 module.exports  = {
