@@ -10,26 +10,24 @@ const flash = require('connect-flash');
 const AuthRouter = require('./routes/v1/auth.routes');
 const pgSession = require('connect-pg-simple')(session);
 const databaseConfig = require('./config/database.config');
-const { isSuperAdmin } = require('./middlewares/auth.middleware');
 const rdbStore = require('./redis/redis.store')(session);
 require('./authentication/passport')(passport)
 require('dotenv').config()
-
+const cors = require('cors');
 // const postgresStore = new pgSession({
 //   // pool:databaseConfig.pool,
 //   conString: databaseConfig.PG_CONNECT_STRING,
 //   tableName: 'session'
 // })
-const statusMonitor = require('express-status-monitor')({ chartVisibility:{
-  statusCodes:true,
-}});
+
 
 class App {
   app = express();
   PORT = process.env.PORT || 3004
-  API_PREFIX = '/api'
 
-  constructor (){ }
+  constructor (){
+
+  }
 
   middleware(){
     const oneDay = 1000 * 60 * 60 * 24;
@@ -38,6 +36,7 @@ class App {
     this.app.use(express.urlencoded({extended: true}));
     this.app.use(express.static(path.join(__dirname,'public')));
     this.app.use(morgan('dev'));
+    this.app.use(cors("*"))
     this.app.use(flash());
     this.app.use(cookieParser())
     this.app.use(session({
@@ -53,14 +52,13 @@ class App {
     // * and telling express to handle sessions with passport
     this.app.use(passport.initialize());
     this.app.use(passport.session())
-
-    this.app.get('/status',isSuperAdmin,statusMonitor.pageRoute)
+    
   }
 
   async initRoutes (){
     await Sequelize.initDatabase();
     this.app.use(AuthRouter)
-    this.app.use(`${this.API_PREFIX}`,RootRouter)
+    this.app.use(`/api`,RootRouter)
 
     // * 404 error
     this.app.use(function(req,res){
@@ -86,6 +84,5 @@ class App {
     }
   }
 }
-
 
 module.exports = new App()
