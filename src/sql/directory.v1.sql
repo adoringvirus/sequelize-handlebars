@@ -77,6 +77,10 @@ CREATE TABLE USER_FEATURES (
   id bigserial,
   user_feature_name VARCHAR(50),
   user_feature_description VARCHAR(500),
+  created_at timestamp,
+  updated_at timestamp,
+  created_by int,
+  updated_by int,
   PRIMARY KEY (id)
 );
 
