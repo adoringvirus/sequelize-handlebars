@@ -20,8 +20,8 @@ MoviesRouter.post(
   isSuperAdmin,
   assignFilmakingMemberToMovie
 );
-MoviesRouter.delete(`
-  ${MOVIE_ROUTE_PREFIX}/:movieId/filmaking-members/:filmakingMemberId`,
+MoviesRouter.delete(
+  `${MOVIE_ROUTE_PREFIX}/:movieId/filmaking-members/:filmakingMemberId`,
   isSuperAdmin,
   unsignedFilmakingMemberFromMovie
 );
