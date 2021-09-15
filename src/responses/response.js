@@ -15,7 +15,7 @@ exports.RESPONSES = {
     res,
     responseParameters = options
   ){
-    const { data,path,code,version,message,title  } = responseParameters;
+    const { data,path,code=200,version,message,title  } = responseParameters;
     return res.status(code).json({
       path,
       version,
@@ -30,7 +30,7 @@ exports.RESPONSES = {
     res,
     responseParameters
   ){
-    const { path,code,version,message,error  } = responseParameters;
+    const { path,code=400,version,message,error  } = responseParameters;
     return res.status(code).json({
       path,
       version,
@@ -46,7 +46,7 @@ exports.RESPONSES = {
     res,
     responseParameters
   ){
-    const { path,code,version,message,error  } = responseParameters;
+    const { path,code=500,version,message,error  } = responseParameters;
     return res.status(code).json({
       path,
       version,
