@@ -6,14 +6,17 @@ const passport = require('passport');
 var cookieParser = require('cookie-parser')
 const session = require('express-session');
 const RootRouter = require('./routes');
+const cors = require('cors');
 const flash = require('connect-flash');
 const AuthRouter = require('./routes/v1/auth.routes');
 const pgSession = require('connect-pg-simple')(session);
+const socketio = require('./socket/socket');
+
+
 const databaseConfig = require('./config/database.config');
 const rdbStore = require('./redis/redis.store')(session);
 require('./authentication/passport')(passport)
 require('dotenv').config()
-const cors = require('cors');
 // const postgresStore = new pgSession({
 //   // pool:databaseConfig.pool,
 //   conString: databaseConfig.PG_CONNECT_STRING,
@@ -25,9 +28,7 @@ class App {
   app = express();
   PORT = process.env.PORT || 3004
 
-  constructor (){
-
-  }
+  constructor (){ }
 
   middleware(){
     const oneDay = 1000 * 60 * 60 * 24;
@@ -75,7 +76,7 @@ class App {
   async init(){
     this.initRoutes();
     this.middleware();
-
+    socketio()
     try {
       this.app.listen(this.PORT)
       console.log(`Server running on port ${this.PORT}`)
