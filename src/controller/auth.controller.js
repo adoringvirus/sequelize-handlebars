@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const nodemailer = require('nodemailer')
 const {decryptPrivate,encryptPublic} = require('../utils/encryptation.util');
 const { setTransporter } = require('../email/nodemailer');
+const { RESPONSES } = require('../responses/response');
 
 const public = fs.readFileSync(__dirname + "/id_rsa_priv.pem","utf8");
 const private = fs.readFileSync(__dirname + "/id_rsa_priv.pem","utf8");
@@ -56,8 +57,10 @@ module.exports  = {
 
     await setTransporter(mailOptions).sendMail();
 
-    res.status(201).json({
-      message: 'User registered'
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'User registered',
+      data: null
     })
   },
 
@@ -68,8 +71,10 @@ module.exports  = {
     res
   ){
     req.logOut()
-    res.status(200).json({
-      message: 'user Log out successfully',
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'User logged out',
+      data: null
     })
   },
   async resetPassword(
