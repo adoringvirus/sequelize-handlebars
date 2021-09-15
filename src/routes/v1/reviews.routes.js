@@ -8,7 +8,7 @@ const { baseRoute } = require('./base.routes');
 const ReviewsRouter = Router();
 const BASE_MOVIE_ROUTE = `/movies/:movieId/reviews`
 
-ReviewsRouter.get(`/${BASE_MOVIE_ROUTE}`,isParamValid, getAllReviewsFromMovie);
+ReviewsRouter.get(`${BASE_MOVIE_ROUTE}`,isParamValid, getAllReviewsFromMovie);
 ReviewsRouter.get(`${BASE_MOVIE_ROUTE}/:reviewId`,isParamValid,getOneReviewFromMovie);
 ReviewsRouter.post(`${BASE_MOVIE_ROUTE}`,isParamValid,createReviewFromMovie);
 ReviewsRouter.put(`${BASE_MOVIE_ROUTE}/:reviewId`,isParamValid,updateReviewFromMovie);
