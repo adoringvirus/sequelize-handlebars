@@ -1,40 +1,12 @@
-const FilmakingMembersMoviesRelationModel = require("../models/relations/filmaking-member-movies.model");
-const FilmakingMembersMemberRolesModel = require("../models/relations/filmaking-members-roles.model");
+const { RESPONSES } = require("../responses/response");
+const {  
+  addRoleToFilmakingMember, 
+  deleteRoleFromFilmakingMember, 
+  addFilmakingMemberToMovie, 
+  deleteFilmakingMemberFromMovie 
+} = require("../services/filmaking-member-movie.service");
 
 module.exports  = {
-  async unsignedFilmakingMemberFromMemberRole(
-    /** @type {import('express').Request } */
-    req,
-    /** @type {import('express').Response } */
-    res
-  ){
-    const { filmakingMemberId,filmakingMemberRoleId } = req.params;
-    
-    try {
-      const deletedMemberRoleAssignment  = await FilmakingMembersMemberRolesModel.destroy({
-        where:{
-          filmaking_member_id: filmakingMemberId,
-          filmaking_member_role_id: filmakingMemberRoleId
-        }
-      });
-    
-      if( deletedMemberRoleAssignment.length === 0 ) res.status(400).json({
-        message:'',
-        status: '',
-        error: 'user does not exist'
-      });
-  
-      return res.status(200).json({
-        message:'',
-        data:deletedMemberRoleAssignment
-      })
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
-  },
   async assignedFilmakingMemberToMemberRole(
     /** @type {import('express').Request } */
     req,
@@ -42,25 +14,51 @@ module.exports  = {
     res
   ){
     const { filmakingMemberId,filmakingMemberRoleId } = req.params;
-    // console.log(`filma`, filmakingMemberId)
-    try {
-      const newMemberRoleAssignment  = await FilmakingMembersMemberRolesModel.create({
-        filmaking_member_id: filmakingMemberId,
-        filmaking_member_role_id: filmakingMemberRoleId
-      });
-  
-      return res.status(200).json({
-        message:'',
-        data: newMemberRoleAssignment
-      })
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        message:'',
-        status:'failed',
-        error:error.parent.detail
-      })
-    }
+    const assignment  = await addRoleToFilmakingMember(filmakingMemberId,filmakingMemberRoleId);
+
+    if(!assignment)  return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      error: true,
+      message:'Error trying to assign role',
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 201,
+      message: `Role assign to filmaking-member ${filmakingMemberId}`,
+      data: assignment
+    })
+  },
+  async unsignedFilmakingMemberFromMemberRole(
+    /** @type {import('express').Request } */
+    req,
+    /** @type {import('express').Response } */
+    res
+  ){
+    const { filmakingMemberId,filmakingMemberRoleId } = req.params;
+    const deletedAssignment  = await deleteRoleFromFilmakingMember(filmakingMemberId,filmakingMemberRoleId);
+    
+    if(deletedAssignment === undefined ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'Could not find filmaking member or role',
+      error: true,
+      data: null
+    })
+
+    if(deletedAssignment === null ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred deleting role',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'Role deleted from filmaking member',
+      data: deletedAssignment
+    })
+
   },
   async assignFilmakingMemberToMovie(
     /** @type {import('express').Request } */
@@ -69,24 +67,21 @@ module.exports  = {
     res
   ){
     const { filmakingMemberId,movieId } = req.params;
-    try {
-      const newMovieAssignment  = await FilmakingMembersMoviesRelationModel.create({
-        filmaking_member_id: filmakingMemberId,
-        movie_id: movieId
-      });
-  
-      return res.status(200).json({
-        message:'',
-        data: newMovieAssignment
-      })
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        message:'',
-        status:'failed',
-        error:error.parent.detail
-      })
-    }
+    const assignment  = await addFilmakingMemberToMovie(filmakingMemberId,movieId);
+
+    if(!assignment)  return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      error: true,
+      message:'Error trying to assign filmaking member',
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 201,
+      message: `Filmaking member assign to movie ${movieId}`,
+      data: assignment
+    })
   },
   async unsignedFilmakingMemberFromMovie(
     /** @type {import('express').Request } */
@@ -95,23 +90,26 @@ module.exports  = {
     res
   ){
     const { filmakingMemberId,movieId } = req.params;
-    try {
-      const newMovieAssignment  = await FilmakingMembersMoviesRelationModel.destroy({
-        filmaking_member_id: filmakingMemberId,
-        movie_id: movieId
-      });
-  
-      return res.status(200).json({
-        message:'',
-        data: newMovieAssignment
-      })
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        message:'',
-        status:'failed',
-        error:error.parent.detail
-      })
-    }
+    const deletedAssignment  = await deleteFilmakingMemberFromMovie(filmakingMemberId,movieId);
+    
+    if(deletedAssignment === undefined ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'Could not find filmaking member or movie',
+      error: true,
+      data: null
+    })
+
+    if(deletedAssignment === null ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred deleting filmaking member from movie',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: `Filmaking member deleted from ${movieId}`,
+      data: deletedAssignment
+    })
   },
 }

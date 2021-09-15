@@ -1,6 +1,5 @@
-const CommentsModel = require("../models/comments/comments.model");
-const MovieModel = require("../models/movie/movie.model");
-const { RESPONSES } = require('../responses/response')
+const { RESPONSES } = require('../responses/response');
+const { findAllCommentsFromMovie, findOneCommentFromMovie, createOneCommentForMovie, updateOneCommentForMovie, deleteOneCommentForMovie } = require("../services/comment.service");
 
 module.exports  = {
   async getAllCommentsFromMovie (
@@ -10,33 +9,27 @@ module.exports  = {
     res
   ){
     const { movieId } = req.params;
+    const comments = await findAllCommentsFromMovie(movieId);
 
-    try {
-      const comments  = await CommentsModel.findAll({
-        where:{
-          movie_id: movieId
-        },
-      });
-    
-      if( comments.length === 0 ) res.status(400).json({
-        message:'',
-        status: '',
-        error: 'movie does not exist'
-      });
-  
-      res.status(200).json({
-        message:'',
-        data:comments
-      })
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    if(comments.length === 0 ) return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'No comments yet',
+      data: []
+    })
+
+    if(!comments) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred finding comments',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'Category found',
+      data: comments
+    })
   },
-
-
   async getOneCommentFromMovie (
     /** @type {import('express').Request } */
     req,
@@ -44,32 +37,27 @@ module.exports  = {
     res
   ){
     const { movieId,commentId } = req.params;
+    const comment = await findOneCommentFromMovie(commentId,movieId);
 
-    try {
-      const comments  = await CommentsModel.findOne({
-        where:{
-          id: commentId,
-          movie_id: movieId
-        }
-      });
-    
-      if( !comments ) return res.status(400).json({
-        message:'',
-        status: '',
-        error: 'comment does not exist'
-      });
-  
-      res.status(200).json({
-        message:'',
-        data:comments
-      })
+    if(comment === undefined ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'Could not find movie or comment',
+      error: true,
+      data: null
+    })
 
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    if(comment === null ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred finding comment',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'Comment found',
+      data: comment
+    })
   },
   async creteCommentFromMovie (
     /** @type {import('express').Request } */
@@ -78,25 +66,24 @@ module.exports  = {
     res
   ){
     const { movieId } = req.params;
-    // const { } = req.body
-    try {
-      const newComment  = await CommentsModel.create({
-        ...req.body,
-        movie_id: movieId,
-        user_id: 2
-      });
-      
-      res.status(200).json({
-        message:'',
-        data:newComment
-      })
+    const createdComment = await createOneCommentForMovie({
+      movieId,
+      userId: req.session.passport.user.id
+    },req.body)
 
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    if(!createdComment) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred creating the comment',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 201,
+      message: 'Comment created',
+      data: createdComment
+    })
   },
   async updateCommentFromMovie (
     /** @type {import('express').Request } */
@@ -106,33 +93,33 @@ module.exports  = {
   ){
     const { movieId,commentId } = req.params;
 
-    try {
-      const comment  = await CommentsModel.findOne({
-        where:{
-          id: commentId,
-          movie_id: movieId
-        }
-      });
-    
-      if( !comment ) return res.status(400).json({
-        message:'',
-        status: '',
-        error: 'comment does not exist'
-      });
-  
-      const updatedComment = await comment.update(req.body);
+    const updatedComment = await updateOneCommentForMovie({
+      commentId,
+      movieId
+    },{
+      ...req.body,
+      updated_by: req.session.passport.user.id
+    });
 
-      res.status(200).json({
-        message:'',
-        data:updatedComment
-      })
+    if(updatedComment === undefined ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'Could not find movie or comment',
+      error: true,
+      data: null
+    })
 
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    if(updatedComment === null ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred updating comment',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'Comment updated',
+      data: updatedComment
+    })
   },
   async deleteCommentFromMovie (
     /** @type {import('express').Request } */
@@ -142,30 +129,26 @@ module.exports  = {
   ){
     const { movieId,commentId } = req.params;
 
-    try {
-      const deletedComment  = await CommentsModel.destroy({
-        where:{
-          id: commentId,
-          movie_id: movieId
-        }
-      });
-    
-      if( !deletedComment ) return res.status(400).json({
-        message:'',
-        status: '',
-        error: 'comment does not exist'
-      });
-      
-      res.status(200).json({
-        message:`comment ${deletedComment} was deleted`,
-        data:deletedComment
-      })
+    const deletedComment = await deleteOneCommentForMovie(commentId,movieId);
 
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    if(deletedComment === undefined ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'Could not find movie or comment',
+      error: true,
+      data: null
+    })
+
+    if(deletedComment === null ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred deleting comment',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'Comment deleted',
+      data: deletedComment
+    })
   }
 }

@@ -55,7 +55,10 @@ exports.baseController  = (_model,_modelName)=> {
       })
     },
     async createModel (req,res){
-      const createdModel = await createOneEntity(_model,req.body);
+      const createdModel = await createOneEntity(_model,{
+        ...req.body,
+        created_by: req.session.passport.user.id
+      });
 
       if(!createdModel){ return RESPONSES.BAD_REQUEST(res,{
         path: req.originalUrl,
@@ -74,7 +77,12 @@ exports.baseController  = (_model,_modelName)=> {
   
     async updateModel (req,res){
       const { id } = req.params;
-      const updatedModel = await updateOneEntity(_model, req.body, {id:id});
+      const updatedModel = await updateOneEntity(
+        _model,
+        {
+          ...req.body,
+          updated_by:req.session.passport.user.id}, 
+        {id:id});
 
       if(!updatedModel){ return RESPONSES.BAD_REQUEST(res,{
         path: req.originalUrl,

@@ -1,5 +1,11 @@
-const MovieModel = require("../models/movie/movie.model");
-const ReviewsModel = require("../models/reviews/reviews.model");
+const { RESPONSES } = require("../responses/response");
+const { 
+  findAllReviewsFromMovie, 
+  findOneReviewFromMovie, 
+  createOneReviewForMovie, 
+  updateOneReviewsForMovie, 
+  deleteOneReviewFromMovie
+} = require("../services/review.service");
 
 
 module.exports  = {
@@ -10,34 +16,27 @@ module.exports  = {
     res
   ){
     const { movieId } = req.params;
+    const reviews = await findAllReviewsFromMovie(movieId);
 
-    try {
-      const reviews  = await ReviewsModel.findAll({
-        // include: MovieModel,
-        where:{
-          movie_id: movieId
-        },
-      });
-    
-      if( reviews.length === 0 ) res.status(400).json({
-        message:'',
-        status: '',
-        error: 'review does not exist'
-      });
-  
-      res.status(200).json({
-        message:'',
-        data:reviews
-      })
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    if(reviews.length === 0 ) return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'No reviews yet',
+      data: []
+    })
+
+    if(!reviews) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred finding reviews',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'Reviews found',
+      data: reviews
+    })
   },
-
-
   async getOneReviewFromMovie (
     /** @type {import('express').Request } */
     req,
@@ -45,32 +44,27 @@ module.exports  = {
     res
   ){
     const { movieId,reviewId } = req.params;
+    const review = await findOneReviewFromMovie(reviewId,movieId);
 
-    try {
-      const review  = await ReviewsModel.findOne({
-        where:{
-          id: reviewId,
-          movie_id: movieId
-        }
-      });
-    
-      if( !review ) return res.status(400).json({
-        message:'',
-        status: '',
-        error: 'review does not exist'
-      });
-  
-      res.status(200).json({
-        message:'',
-        data:review
-      })
+    if(review === undefined ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'Could not find movie or review',
+      error: true,
+      data: null
+    })
 
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    if(review === null ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred finding review',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'Review found',
+      data: review
+    })
   },
   async createReviewFromMovie (
     /** @type {import('express').Request } */
@@ -79,25 +73,24 @@ module.exports  = {
     res
   ){
     const { movieId } = req.params;
-    // const { } = req.body
-    try {
-      const newReview  = await ReviewsModel.create({
-        ...req.body,
-        movie_id: movieId,
-        user_id: 2
-      });
-      
-      res.status(200).json({
-        message:'',
-        data:newReview
-      })
+    const createdReview = await createOneReviewForMovie({
+      movieId,
+      userId: req.session.passport.user.id
+    },req.body)
 
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    if(!createdReview) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred creating the review',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 201,
+      message: 'Review created',
+      data: createdReview
+    })
   },
   async updateReviewFromMovie (
     /** @type {import('express').Request } */
@@ -107,33 +100,33 @@ module.exports  = {
   ){
     const { movieId,reviewId } = req.params;
 
-    try {
-      const review  = await ReviewsModel.findOne({
-        where:{
-          id: reviewId,
-          movie_id: movieId
-        }
-      });
-    
-      if( !review ) return res.status(400).json({
-        message:'',
-        status: '',
-        error: 'review does not exist'
-      });
-  
-      const updatedReview = await review.update(req.body);
+    const updatedReview = await updateOneReviewsForMovie({
+      reviewId,
+      movieId
+    },{
+      ...req.body,
+      updated_by: req.session.passport.user.id
+    });
 
-      res.status(200).json({
-        message:'',
-        data:updatedReview
-      })
+    if(updatedReview === undefined ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'Could not find movie or review',
+      error: true,
+      data: null
+    })
 
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    if(updatedReview === null ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred updating review',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'Review updated',
+      data: updatedReview
+    })
   },
   async deleteReviewFromMovie (
     /** @type {import('express').Request } */
@@ -142,31 +135,26 @@ module.exports  = {
     res
   ){
     const { movieId,reviewId } = req.params;
+    const deletedReview = await deleteOneReviewFromMovie(reviewId,movieId);
 
-    try {
-      const deletedReview  = await ReviewsModel.destroy({
-        where:{
-          id: reviewId,
-          movie_id: movieId
-        }
-      });
-    
-      if( !deletedReview ) return res.status(400).json({
-        message:'',
-        status: '',
-        error: 'review does not exist'
-      });
-      
-      res.status(200).json({
-        message:`review ${deletedReview} was deleted`,
-        data:deletedReview
-      })
+    if(deletedReview === undefined ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'Could not find movie or review',
+      error: true,
+      data: null
+    })
 
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    if(deletedReview === null ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred deleting review',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: 'Review deleted',
+      data: deletedReview
+    })
   }
 }

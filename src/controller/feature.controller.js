@@ -1,64 +1,58 @@
-const UsersFeaturesRelationModel = require("../models/relations/user-features-users.model");
+const { addFeatureToUser, deleteFeatureFromUser } = require("../services/user-feature.service");
+const { RESPONSES } = require('../responses/response');
 
 module.exports  = {
-  async unsignedFeatureFromUser(
-    /** @type {import('express').Request } */
-    req,
-    /** @type {import('express').Response } */
-    res
-  ){
-    const { userFeatureId } = req.params;
-
-    try {
-      const deletedAssignment  = await UsersFeaturesRelationModel.destroy({
-        where:{
-          user_id: 1,
-          user_feature_id: userFeatureId
-        }
-      });
-    
-      if( deletedAssignment.length === 0 ) res.status(400).json({
-        message:'',
-        status: '',
-        error: 'user does not exist'
-      });
-  
-      return res.status(200).json({
-        message:'',
-        data:deletedAssignment
-      })
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
-  },
   async assignFeatureToUser(
     /** @type {import('express').Request } */
     req,
     /** @type {import('express').Response } */
     res
-  ){
-    const { userFeatureId } = req.params;
+    ){
+      const { userFeatureId,userId } = req.params;
+      
+      const assignment  = await addFeatureToUser(userFeatureId,userId);
 
-    try {
-      const newFeatureAssignment  = await UsersFeaturesRelationModel.create({
-        user_id: 1,
-        user_feature_id: userFeatureId
-      });
+      if(!assignment)  return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        error: true,
+        message:'Error trying to assign feature',
+        data: null
+      })
   
-      return res.status(200).json({
-        message:'',
-        data: newFeatureAssignment
+      return RESPONSES.OK(res,{
+        path: req.originalUrl,
+        code: 201,
+        message: `Category assign from user ${userId}`,
+        data: assignment
       })
-    } catch (error) {
-      // console.log(`error`, error.parent.detail)
-      res.status(400).json({
-        message:'',
-        status:'failed',
-        error:error.parent.detail
+    },
+    async unsignedFeatureFromUser(
+      /** @type {import('express').Request } */
+      req,
+      /** @type {import('express').Response } */
+      res
+    ){
+      const { userFeatureId,userId } = req.params;
+      const deletedAssignment  = await deleteFeatureFromUser(userFeatureId,userId);
+    
+      if(deletedAssignment === undefined ) return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        message: 'Could not find user or feature',
+        error: true,
+        data: null
       })
-    }
+  
+      if(deletedAssignment === null ) return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        message: 'An error ocurred assigning feature',
+        error: true,
+        data: null
+      })
+  
+      return RESPONSES.OK(res,{
+        path: req.originalUrl,
+        message: 'Feature deleted',
+        data: deletedAssignment
+      })
+    },
   }
-}

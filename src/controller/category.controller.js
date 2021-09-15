@@ -1,9 +1,8 @@
-const CategoryModel = require("../models/category/category.model");
-const MovieModel = require("../models/movie/movie.model");
-const MovieCategoryRelationModel = require("../models/relations/movies-category.model");
+const { addCategoryToMovie, deleteCategoryFromMovie } = require("../services/category-movie.service");
+const { RESPONSES } = require('../responses/response');
 
 module.exports  = {
-  async unsignedCategoryFromMovie (
+  async assignCategoryToMovie  (
     /** @type {import('express').Request } */
     req,
     /** @type {import('express').Response } */
@@ -11,32 +10,23 @@ module.exports  = {
   ){
     const { movieId,categoryId } = req.params;
 
-    try {
-      const deletedAssignment  = await MovieCategoryRelationModel.destroy({
-        where:{
-          movie_id: movieId,
-          category_id: categoryId
-        }
-      });
-    
-      if( deletedAssignment.length === 0 ) res.status(400).json({
-        message:'',
-        status: '',
-        error: 'movie does not exist'
-      });
-  
-      return res.status(200).json({
-        message:'',
-        data:deletedAssignment
-      })
-    } catch (error) {
-      console.log(`error`, error)
-      res.status(400).json({
-        error:error
-      })
-    }
+    const assignment  = await addCategoryToMovie(movieId,categoryId);
+
+    if(!assignment)  return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      error: true,
+      message:'Error trying to assign category',
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      message: `Category assign from movie ${movieId}`,
+      data: assignment
+    })
+
   },
-  async assignCategoryToMovie(
+  async unsignedCategoryFromMovie(
     /** @type {import('express').Request } */
     req,
     /** @type {import('express').Response } */
@@ -44,23 +34,28 @@ module.exports  = {
   ){
     const { movieId, categoryId } = req.params;
 
-    try {
-      const newCategoryAssignment  = await MovieCategoryRelationModel.create({
-        movie_id: movieId,
-        category_id: categoryId
-      });
-  
-      return res.status(200).json({
-        message:'',
-        data:newCategoryAssignment
-      })
-    } catch (error) {
-      // console.log(`error`, error.parent.detail)
-      res.status(400).json({
-        message:'',
-        status:'failed',
-        error:error.parent.detail
-      })
-    }
+    const deletedAssignment  = await deleteCategoryFromMovie(movieId,categoryId);
+    
+    if(deletedAssignment === undefined ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'Could not find movie or category',
+      error: true,
+      data: null
+    })
+
+    if(deletedAssignment === null ) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'An error ocurred assigning category',
+      error: true,
+      data: null
+    })
+
+    return RESPONSES.OK(res,{
+      path: req.originalUrl,
+      code: 201,
+      message: 'Category deleted',
+      data: deletedAssignment
+    })
+
   }
 }
