@@ -16,7 +16,7 @@ module.exports = {
       // oaepHash: "sha256"
     },bufferedPayload)
 
-    return encryptedPayload .toString("base64") // * return encrypted data
+    return encryptedPayload.toString("base64") // * return encrypted data
   },
   decryptPrivate (_privateKeyPath,_payload){
 
