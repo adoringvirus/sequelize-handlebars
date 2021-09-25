@@ -42,7 +42,7 @@ class App {
     this.app.use(cookieParser())
     this.app.use(session({
       name: '_redis_postgres_db',
-      secret: process.env.SECRET || 'ad@$%6Gqw+df/asd',
+      secret: process.env.COOKIE_SECRET || 'ad@$%6Gqw+df/asd',
       resave: false,
       saveUninitialized: true,
       cookie: {secure: false, maxAge: oneDay },
