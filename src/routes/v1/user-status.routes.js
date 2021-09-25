@@ -8,8 +8,7 @@ const UserStatusRouter = Router();
 baseRoute(
   UserStatusRouter,
   UserStatusModel,
-  'user-status',
-  {isGetProtected:false}
+  'user-status'
 )
 
 module.exports = UserStatusRouter;

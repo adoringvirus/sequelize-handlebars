@@ -3,6 +3,7 @@ const {
   assignedFilmakingMemberToMemberRole,
   unsignedFilmakingMemberFromMemberRole 
 } = require('../../controller/filmaking-member.controller');
+const { isSuperAdmin } = require('../../middlewares/auth.middleware');
 const { isParamValid } = require('../../middlewares/validation.middleware');
 
 const FilmakingMembersModel = require('../../models/filmaking-members/filmaking-members.model');
@@ -17,8 +18,8 @@ baseRoute(
   FilmakingMembersModel,
   'filmaking-members'
 )
-FilmakingMembersRouter.post(`${BASE_ROUTE}`,isParamValid,assignedFilmakingMemberToMemberRole)
-FilmakingMembersRouter.delete(`${BASE_ROUTE}`,isParamValid,unsignedFilmakingMemberFromMemberRole)
+FilmakingMembersRouter.post(`${BASE_ROUTE}`,isParamValid,isSuperAdmin,assignedFilmakingMemberToMemberRole)
+FilmakingMembersRouter.delete(`${BASE_ROUTE}`,isParamValid,isSuperAdmin,unsignedFilmakingMemberFromMemberRole)
 
 
 // FilmakingMembersRouter.stack.map(Layers=>{
