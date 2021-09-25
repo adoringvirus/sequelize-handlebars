@@ -99,28 +99,40 @@ module.exports  = {
     res
   ){
     const { movieId,reviewId } = req.params;
+    const { user_role:{user_role_name},id } = req.session.passport.user;
 
     const updatedReview = await updateOneReviewsForMovie({
       reviewId,
-      movieId
+      movieId,
+      userId: id,
+      bypass: user_role_name === 'superadmin' ? true :  false
     },{
       ...req.body,
-      updated_by: req.session.passport.user.id
+      updated_by: id
     });
 
+    
     if(updatedReview === undefined ) return RESPONSES.BAD_REQUEST(res,{
       path: req.originalUrl,
       message: 'Could not find movie or review',
       error: true,
       data: null
     })
-
+    
     if(updatedReview === null ) return RESPONSES.BAD_REQUEST(res,{
       path: req.originalUrl,
       message: 'An error ocurred updating review',
       error: true,
       data: null
     })
+    
+    if('isOwner' in updatedReview) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 403,
+      message:'You are not the owner',
+      data: null,
+      error: true
+    }) 
 
     return RESPONSES.OK(res,{
       path: req.originalUrl,
@@ -135,7 +147,15 @@ module.exports  = {
     res
   ){
     const { movieId,reviewId } = req.params;
-    const deletedReview = await deleteOneReviewFromMovie(reviewId,movieId);
+    const { user_role:{user_role_name},id } = req.session.passport.user;
+
+    const deletedReview = await deleteOneReviewFromMovie({
+      reviewId,
+      movieId,
+      userId: id,
+      bypass: user_role_name === 'superadmin' ? true :  false
+    });
+
 
     if(deletedReview === undefined ) return RESPONSES.BAD_REQUEST(res,{
       path: req.originalUrl,
@@ -150,6 +170,16 @@ module.exports  = {
       error: true,
       data: null
     })
+  
+    if(!Number(deletedReview)){ // * needs to be number
+      if('isOwner' in deletedReview) return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 403,
+        message:'You are not the owner',
+        data: null,
+        error: true
+      }) 
+    }
 
     return RESPONSES.OK(res,{
       path: req.originalUrl,

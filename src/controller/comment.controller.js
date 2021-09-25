@@ -93,13 +93,18 @@ module.exports  = {
   ){
     const { movieId,commentId } = req.params;
 
+    const { user_role:{user_role_name},id } = req.session.passport.user;
+
     const updatedComment = await updateOneCommentForMovie({
       commentId,
-      movieId
+      movieId,
+      userId: id,
+      bypass: user_role_name === 'superadmin' ? true :  false
     },{
       ...req.body,
-      updated_by: req.session.passport.user.id
+      updated_by: id
     });
+
 
     if(updatedComment === undefined ) return RESPONSES.BAD_REQUEST(res,{
       path: req.originalUrl,
@@ -115,6 +120,14 @@ module.exports  = {
       data: null
     })
 
+    if('isOwner' in updatedComment) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      code: 403,
+      message:'You are not the owner',
+      data: null,
+      error: true
+    }) 
+
     return RESPONSES.OK(res,{
       path: req.originalUrl,
       message: 'Comment updated',
@@ -128,8 +141,14 @@ module.exports  = {
     res
   ){
     const { movieId,commentId } = req.params;
+    const { user_role:{user_role_name},id } = req.session.passport.user;
 
-    const deletedComment = await deleteOneCommentForMovie(commentId,movieId);
+    const deletedComment = await deleteOneCommentForMovie({
+      commentId,
+      movieId,
+      userId: id,
+      bypass: user_role_name === 'superadmin' ? true :  false
+    });
 
     if(deletedComment === undefined ) return RESPONSES.BAD_REQUEST(res,{
       path: req.originalUrl,
@@ -144,6 +163,16 @@ module.exports  = {
       error: true,
       data: null
     })
+
+    if(!Number(deletedComment)){
+      if('isOwner' in deletedComment) return RESPONSES.BAD_REQUEST(res,{
+        path: req.originalUrl,
+        code: 403,
+        message:'You are not the owner',
+        data: null,
+        error: true
+      }) 
+    }
 
     return RESPONSES.OK(res,{
       path: req.originalUrl,
