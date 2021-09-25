@@ -88,7 +88,7 @@ CREATE TABLE USER_FEATURES_USERS_RELATION (
   id bigserial,
   user_id int,
   user_feature_id int,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id,user_id,user_feature_id)
 );
 
 
@@ -102,7 +102,7 @@ CREATE TABLE COMMENTS (
   updated_at timestamp,
   created_by int,
   updated_by int,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id,user_id,movie_id)
 );
 
 CREATE TABLE LIKES (
@@ -113,7 +113,7 @@ CREATE TABLE LIKES (
   updated_at timestamp,
   created_by int,
   updated_by int,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id,user_id,movie_id)
 );
 
 CREATE TABLE REVIEWS (
@@ -125,7 +125,7 @@ CREATE TABLE REVIEWS (
   updated_at timestamp,
   created_by int,
   updated_by int,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id,user_id,movie_id)
 );
 
 
@@ -178,12 +178,14 @@ CREATE TABLE FILMAKING_MEMBERS_AND_MEMBER_ROLES_RELATION(
   id bigserial,
   filmaking_member_role_id int,
   filmaking_member_id int
+  primary key (id,filmaking_member_role_id,filmaking_member_id)
 );
 
 CREATE TABLE FILMAKING_MEMBERS_AND_MOVIES_RELATION (
   id bigserial,
   filmaking_member_id int,
   movie_id int
+  primary key (id,filmaking_member_id,movie_id)
 );
 
 CREATE TABLE CATEGORIES (
@@ -202,7 +204,7 @@ CREATE TABLE MOVIES_CATEGORIES_RELATION (
   id bigserial,
   category_id int,
   movie_id int,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id,category_id,movie_id)
 );
 
 
