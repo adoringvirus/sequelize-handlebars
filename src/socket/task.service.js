@@ -4,9 +4,6 @@ module.exports = {
   async findAllTask(){
     try {
       const tasks = await TaskModel.findAll({
-        where:{
-          is_task_active: true
-        }
       });
       return tasks
     } catch (error) {
@@ -54,8 +51,7 @@ module.exports = {
     try {
       const foundTask = await TaskModel.findOne({
         where:{
-          id:id,
-          is_task_active: true
+          id:id
         }
       })
 
@@ -73,13 +69,11 @@ module.exports = {
     try {
       const foundTask = await TaskModel.findOne({
         where:{
-          id:id,
-          is_task_active: true
+          id:id
         }
       })
 
       if(!foundTask) return []
-      foundTask.is_task_active = false;
     
       await foundTask.save()
       return foundTask 

@@ -3,12 +3,14 @@ const socket = require('socket.io')
 const TaskModel = require('../models/task.model')
 const { findAllTask, updateOneTask } = require('./task.service')
 const { newTask,destroyTask, updateTask } = require('./socket.events');
+const jwt = require('jsonwebtoken');
 
 module.exports =  (app=null)=>{
   let io, httpServer
   const corsOptions =  {
     cors:{
-      origin: ['http://localhost:3000']
+      origin: [process.env.SOCKET_HOST || 'http://localhost:3000'],
+      method:['GET','POST']
     }
   }
 
@@ -19,16 +21,28 @@ module.exports =  (app=null)=>{
   }else{
     io = socket(process.env.SOCKET_PORT || 3004,corsOptions)
   } 
-  
-  
-  io.on('connection',async (client)=>{      
+  io.use(async (socket,next)=>{
+    if(socket.handshake.query && socket.handshake.query.token){
+      try {
+        const verified = jwt.verify(socket.handshake.query.token,'SECRET');
+        socket.decoded = verified;
+        next()
+      } catch (error) {
+        return next(new Error('Not authenticated'))
+      }
+      
+    }
+    else{
+      next(new Error('Not authenticated'))
+    }
+  })
+  .on('connection',async (client)=>{      
     console.log(`New connection`,client.id)
 
     io.on("get:task",async (client)=>{
       console.log(`algo paso`)
       client.emit('get:task',await findAllTask())
     })
-
     client.emit('get:task',await findAllTask())
     // client.emit('get:task',await findAllTask())
     client.on('delete:task',(data)=>destroyTask(client,data))
