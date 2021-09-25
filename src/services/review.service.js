@@ -51,15 +51,21 @@ module.exports = {
       return null
     }
   },
-  async updateOneReviewsForMovie({reviewId,movieId},body){
+  async updateOneReviewsForMovie({reviewId,movieId,userId,bypass=false},body){
     try {
       const review  = await ReviewModel.findOne({
-        where:{
+        where:!bypass 
+        ? {
           id: reviewId,
-          movie_id: movieId
+          movie_id: movieId,
+          user_id: userId
+        }
+        : {
+          id: reviewId,
+          movie_id: movieId,
         }
       });
-    
+      if( !bypass && !review ) return { isOwner: false }
       if( !review ) return undefined
   
       return await review.update({
@@ -72,15 +78,22 @@ module.exports = {
       return null
     }
   },
-  async deleteOneReviewFromMovie(reviewId,movieId){
+  async deleteOneReviewFromMovie({reviewId,movieId,userId,bypass=false}){
     try {
       const deletedReview  = await ReviewModel.destroy({
-        where:{
+        where:!bypass 
+        ? {
           id: reviewId,
-          movie_id: movieId
+          movie_id: movieId,
+          user_id: userId
+        }
+        : {
+          id: reviewId,
+          movie_id: movieId,
         }
       });
-    
+
+      if( !bypass && !deletedReview ) return { isOwner: false }
       if( !deletedReview ) return undefined
       
       return deletedReview

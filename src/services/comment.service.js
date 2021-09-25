@@ -51,15 +51,22 @@ module.exports = {
       return null
     }
   },
-  async updateOneCommentForMovie({commentId,movieId},body){
+  async updateOneCommentForMovie({commentId,movieId,userId,bypass=false},body){
     try {
       const comment  = await CommentsModel.findOne({
-        where:{
+        where:!bypass
+        ?{
+          id: commentId,
+          movie_id: movieId,
+          user_id: userId,
+        }
+        :{
           id: commentId,
           movie_id: movieId
         }
       });
     
+      if( !bypass && !comment ) return {isOwner: false}
       if( !comment ) return undefined
   
       return await comment.update({
@@ -73,15 +80,21 @@ module.exports = {
       return null
     }
   },
-  async deleteOneCommentForMovie(commentId,movieId){
+  async deleteOneCommentForMovie({commentId,movieId,userId,bypass=false}){
     try {
       const deletedComment  = await CommentsModel.destroy({
-        where:{
+        where:!bypass
+        ?{
+          id: commentId,
+          movie_id: movieId,
+          user_id: userId
+        }
+        :{
           id: commentId,
           movie_id: movieId
         }
       });
-    
+      if( !bypass && !deletedComment ) return {isOwner: false}
       if( !deletedComment ) return undefined
       
       return deletedComment
