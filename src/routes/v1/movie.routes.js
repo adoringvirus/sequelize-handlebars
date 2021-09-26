@@ -8,11 +8,12 @@ const { isSuperAdmin } = require('../../middlewares/auth.middleware');
 
 const MoviesRouter = Router();
 const MOVIE_ROUTE_PREFIX = '/movies'
+const isUpdate = true
 
 MoviesRouter.get(`${MOVIE_ROUTE_PREFIX}`,getAllMovies);
 MoviesRouter.get(`${MOVIE_ROUTE_PREFIX}/:id`,isParamValid,getOneMovie);
-MoviesRouter.post(`${MOVIE_ROUTE_PREFIX}`,isValidBody(MovieSchema),isSuperAdmin,createMovie);
-MoviesRouter.put(`${MOVIE_ROUTE_PREFIX}/:id`,isParamValid,isSuperAdmin, updateMovie);
+MoviesRouter.post(`${MOVIE_ROUTE_PREFIX}`,isValidBody(MovieSchema()),isSuperAdmin,createMovie);
+MoviesRouter.put(`${MOVIE_ROUTE_PREFIX}/:id`,isValidBody(MovieSchema(isUpdate)),isParamValid,isSuperAdmin, updateMovie);
 MoviesRouter.delete(`${MOVIE_ROUTE_PREFIX}/:id`,isParamValid,isSuperAdmin,deleteMovie);
 
 MoviesRouter.post(

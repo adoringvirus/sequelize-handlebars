@@ -3,6 +3,8 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
 const { signIn, signUp, logout, verifyEmail } = require('../../controller/auth.controller');
+const { isValidBody } = require('../../middlewares/validation.middleware');
+const UserSchema = require('../../validation/UserSchema');
 
 const AuthRouter = Router();
 
@@ -10,7 +12,7 @@ AuthRouter.get('/auth/signin',passport.authenticate('local',{
   failureRedirect: '/not-found'
 }),signIn);
 
-AuthRouter.post('/auth/signup',signUp);
+AuthRouter.post('/auth/signup',isValidBody(UserSchema()),signUp);
 AuthRouter.get('/auth/logout',logout);
 AuthRouter.get('/authenticate',async (req,res)=>{
 
