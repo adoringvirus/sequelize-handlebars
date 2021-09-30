@@ -38,6 +38,8 @@ CREATE TABLE postgres.USERS (
   user_email VARCHAR(50) NOT NULL,
   user_password VARCHAR(70) NOT NULL,
   user_avatar VARCHAR(70),
+  user_verified BOOLEAN NOT NULL DEFAULT false,
+  user_blocked BOOLEAN NOT NULL DEFAULT false,
   user_verify_token VARCHAR(250),
   user_last_login_at DATE,
   user_last_ip_address INET,

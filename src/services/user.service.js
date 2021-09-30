@@ -48,6 +48,8 @@ module.exports = {
         user_password: userInfo.user_password,
         user_avatar: userInfo.user_avatar,
         user_verify_token: userInfo.user_verify_token,
+        user_verified: userInfo.user_verified,
+        user_blocked: userInfo.user_blocked,
         status_id: userInfo.status_id,
         role_id: userInfo.role_id,
         created_by: userInfo.created_by
@@ -78,6 +80,8 @@ module.exports = {
         user_password: userInfo.user_password,
         user_avatar: userInfo.user_avatar,
         user_verify_token: userInfo.user_verify_token,
+        user_verified: userInfo.user_verified,
+        user_blocked: userInfo.user_blocked,
         status_id: userInfo.status_id,
         role_id: userInfo.role_id,
         updated_by: userInfo.updated_by

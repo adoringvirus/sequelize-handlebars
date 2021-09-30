@@ -24,6 +24,14 @@ module.exports  = {
     allowNull: false,
     type:  DataTypes.STRING
   },
+  user_verified: {
+    type:DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  user_blocked: {
+    type:DataTypes.BOOLEAN,
+    defaultValue: false
+  },
   user_avatar:   DataTypes.STRING,
   user_verify_token:   DataTypes.STRING,
   user_last_login_at:   DataTypes.DATE,
