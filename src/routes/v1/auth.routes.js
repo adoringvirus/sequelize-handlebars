@@ -2,7 +2,7 @@ const { Router } = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
-const { signIn, signUp, logout, verifyEmail } = require('../../controller/auth.controller');
+const { signIn, signUp, logout, verifyEmail, verifyToken, activateUser } = require('../../controller/auth.controller');
 const { isValidBody } = require('../../middlewares/validation.middleware');
 const UserSchema = require('../../validation/UserSchema');
 
@@ -22,6 +22,8 @@ AuthRouter.get('/authenticate',async (req,res)=>{
   })
 })
 AuthRouter.get('/auth/verify-email/:tokenId',verifyEmail);
+AuthRouter.get('/auth/activate-user/:tokenId',verifyToken);
+AuthRouter.post('/auth/activate-user',activateUser);
 // AuthRouter.get('/auth/reset-password');
 // AuthRouter.get('/auth/change-email');
 
