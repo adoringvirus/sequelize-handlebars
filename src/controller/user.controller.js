@@ -5,6 +5,8 @@ const {
   deleteOneUser 
 } = require('../services/user.service')
 
+const { JWT_SECRET } = require('../config/index');
+const { getStatus, getRole } = require('../services/util.service');
 
 module.exports  = {
   async getAllUsers (
@@ -67,9 +69,40 @@ module.exports  = {
     /** @type {import('express').Response } */
     res
   ){
+    const _status = await getStatus('inactive');
+    const _role = await getRole('user');
+
+    // * Role checking
+    if(_role.error) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'There is no roles yet, please make one before continuing',
+      data: null
+    })
+
+    if(_role.internalError) return RESPONSES.INTERNAL_ERROR(res,{
+      path: req.originalUrl,
+      message: 'Something went wrong in server',
+      data: null
+    })
+
+    // * Status checking
+    if(_status.error) return RESPONSES.BAD_REQUEST(res,{
+      path: req.originalUrl,
+      message: 'There is no status yet, please make one before continuing',
+      data: null
+    })
+
+    if(_status.internalError) return RESPONSES.INTERNAL_ERROR(res,{
+      path: req.originalUrl,
+      message: 'Something went wrong in server',
+      data: null
+    })
+
     const createdUser = await createOneUser({
       ...req.body,
-      created_by:req.user.id
+      created_by: req.session.passport.user.id,
+      status_id: _status.id,
+      role_id: _role.id
     })
 
     if(!createdUser) return RESPONSES.BAD_REQUEST(res,{
@@ -78,11 +111,14 @@ module.exports  = {
       data: null,
       message: 'Could not create user',
     })
-    
+
+    const jwtToken = await jwt.sign({userId:createdUser.id},JWT_SECRET);
+
     return RESPONSES.OK(res,{
       path: req.originalUrl,
       code: 201,
-      data: createdUser,
+      token: `${jwtToken}`,
+      data: null,
       message: 'User created',
     })
 
