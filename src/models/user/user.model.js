@@ -20,7 +20,15 @@ const UserModel = sequelize.define('users',UserDefinition,{
     }
   },
   hooks:{
-    beforeCreate : async (user,options)=>{
+    beforeCreate: async (user,options)=>{
+      try {
+        const hashedPassword = await bcrypt.hash(user.user_password,10);
+        user.user_password = hashedPassword;
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    beforeUpdate: async (user,options)=>{
       try {
         const hashedPassword = await bcrypt.hash(user.user_password,10);
         user.user_password = hashedPassword;
