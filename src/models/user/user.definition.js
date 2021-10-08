@@ -2,14 +2,29 @@ const { DataTypes } = require("sequelize")
 const globalDefinition = require('../global-columns-definition');
 
 module.exports  = {
-  user_username:   DataTypes.STRING,
+  id:{
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  user_username:   {
+    type:DataTypes.STRING,
+    unique: true,
+  },
   user_first_name: {
     allowNull: false,
-    type:  DataTypes.STRING
+    type:  DataTypes.STRING,
+    validate:{
+      isLowercase: true, 
+    }
   },
   user_last_name:{
     allowNull: false,
-    type:  DataTypes.STRING
+    type:  DataTypes.STRING,
+    validate:{
+      isLowercase: true, 
+    }
   },
   user_phone:  DataTypes.STRING,
   user_email: {
@@ -17,6 +32,7 @@ module.exports  = {
     type:  DataTypes.STRING,
     validate:{
       isEmail: true,
+      isLowercase: true,
     },
     unique: true
   },
@@ -38,5 +54,7 @@ module.exports  = {
   user_last_ip_address:   DataTypes.STRING,
   role_id:   DataTypes.INTEGER,
   status_id:   DataTypes.INTEGER,
+  deleted_at: DataTypes.DATE,
+  deleted_by: DataTypes.INTEGER,
   ...globalDefinition
 }
