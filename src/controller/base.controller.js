@@ -107,18 +107,19 @@ exports.baseController  = (_model,_modelName)=> {
   
     async deleteModel(req,res){
       const { id } = req.params;
+      const { id:userId } =  req.session.passport.user
       const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
       console.log(ip);
-      const updatedModel = await deleteOneEntity(_model, req.body, {id:id});
+      const deletedModel = await deleteOneEntity(_model, {id:id},userId);
 
-      if(!updatedModel){ return RESPONSES.BAD_REQUEST(res,{
+      if(!deletedModel){ return RESPONSES.BAD_REQUEST(res,{
         path: req.originalUrl,
         code: 400,
         message: `An error ocurred trying to delete ${_modelName}`,
         data: null,
       })}
 
-      if(updatedModel.length === 0) return RESPONSES.BAD_REQUEST(res,{
+      if(deletedModel.length === 0) return RESPONSES.BAD_REQUEST(res,{
         path: req.originalUrl,
         code: 400,
         message: `${_modelName} #${id} does not exist`,
@@ -128,7 +129,7 @@ exports.baseController  = (_model,_modelName)=> {
         path: req.originalUrl,
         code: 200,
         message: `${_modelName} #${id} deleted`,
-        data: updatedModel,
+        data: deletedModel,
       });
     }
   }
