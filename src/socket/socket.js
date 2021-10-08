@@ -1,8 +1,5 @@
 const http = require('http');
 const socket = require('socket.io')
-const TaskModel = require('../models/task.model')
-const { findAllTask, updateOneTask } = require('./task.service')
-const { newTask,destroyTask, updateTask } = require('./socket.events');
 const jwt = require('jsonwebtoken');
 
 module.exports =  (app=null)=>{
@@ -39,15 +36,6 @@ module.exports =  (app=null)=>{
   .on('connection',async (client)=>{      
     console.log(`New connection`,client.id)
 
-    io.on("get:task",async (client)=>{
-      console.log(`algo paso`)
-      client.emit('get:task',await findAllTask())
-    })
-    client.emit('get:task',await findAllTask())
-    // client.emit('get:task',await findAllTask())
-    client.on('delete:task',(data)=>destroyTask(client,data))
-    client.on('update:task',(data)=>updateTask(client,data))
-    client.on('new:task',(data)=>newTask(client,data))
   })
 
   // * if express app exist initialize the http server with that configuration
