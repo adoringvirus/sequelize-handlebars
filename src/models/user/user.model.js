@@ -40,6 +40,7 @@ const UserModel = sequelize.define('users',UserDefinition,{
   // instanceMethods:{
   //   // validPassword
   // },
+  paranoid: true,
   ...globalSqlOptions
 })
 

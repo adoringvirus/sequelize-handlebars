@@ -7,7 +7,10 @@ const sequelize = require('../../database/database').bootstrap();
 const UserRolesModel = sequelize.define(
   'user_roles',
   userRolesDefinition,
-  globalSqlOptions)
+  {
+    paranoid:true,
+    ...globalSqlOptions
+  })
 
 
 UserModel.belongsTo(UserRolesModel,{

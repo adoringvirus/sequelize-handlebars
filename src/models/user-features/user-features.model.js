@@ -5,6 +5,9 @@ const sequelize = require('../../database/database').bootstrap();
 const UserFeaturesModel = sequelize.define(
   'user_features',
   userFeatureDefinition,
-  globalSqlOptions)
+  {
+    paranoid:true,
+    ...globalSqlOptions
+  })
 
 module.exports = UserFeaturesModel;

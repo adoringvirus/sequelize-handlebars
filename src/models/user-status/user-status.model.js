@@ -6,6 +6,8 @@ const sequelize = require('../../database/database').bootstrap();
 class UserStatusModel extends Model {}
 UserStatusModel.init(userStatusDefinition,{
   sequelize,
+  paranoid: true,
+  deletedAt: 'deleted_at',
   ...globalSqlOptions,
   modelName:'user_statuses',
 })
