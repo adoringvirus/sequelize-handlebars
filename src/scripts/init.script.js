@@ -1,12 +1,17 @@
 const UserService = require('../services/user.service');
-const { getRole,getStatus } = require('../services/util.service');
 const sequelize = require('../database/database');
+const { getRole,getStatus } = require('../services/util.service');
 const { createManyEntities } = require('../services/base.service');
+const { generateFilmakingRoles,generateRoles,generateStatuses,generateUserFeatures, generateMovies, generateFilmakingMembers, generateCategories } = require('./dataGeneration.script');
+
+
 const UserStatusModel = require('../models/user-status/user-status.model');
 const UserRolesModel = require('../models/user-roles/user-roles.model');
 const FilmakingMembersRolesModel = require('../models/filmaking-member-roles/filmaking-members-roles.model');
 const UserFeaturesModel = require('../models/user-features/user-features.model');
-const { generateFilmakingRoles,generateRoles,generateStatuses,generateUserFeatures } = require('./dataGeneration.script');
+const MovieModel = require('../models/movie/movie.model');
+const FilmakingMemberModel = require('../models/filmaking-members/filmaking-members.model');
+const CategoryModel = require('../models/category/category.model');
 
 module.exports = async (userInfo)=>{
   sequelize.bootstrap().sync()
@@ -29,17 +34,26 @@ module.exports = async (userInfo)=>{
   
   if(user){
     // * Statuses creation
-    await createManyEntities(UserStatusModel,generateStatuses(user.id))
+    await createManyEntities(UserStatusModel,generateStatuses(user.id));
 
     // * Roles creation 
-    await createManyEntities(UserRolesModel,generateRoles(user.id))
+    await createManyEntities(UserRolesModel,generateRoles(user.id));
 
     // * UserFeatures
-    await createManyEntities(UserFeaturesModel,generateUserFeatures(user.id))
+    await createManyEntities(UserFeaturesModel,generateUserFeatures(user.id));
+
+    // * Movies
+    await createManyEntities(MovieModel,generateMovies(user.id));
+
+    // * Categories 
+    await createManyEntities(CategoryModel,generateCategories(user.id));
+
+    // * Filmaking member
+    await createManyEntities(FilmakingMemberModel,generateFilmakingMembers(user.id));
 
     // * Filmaking member role
-    await createManyEntities(FilmakingMembersRolesModel,generateFilmakingRoles(user.id))
-  
+    await createManyEntities(FilmakingMembersRolesModel,generateFilmakingRoles(user.id));
+    
     const _status = await getStatus('active')
     const _role = await getRole('superadmin')
     
