@@ -12,7 +12,12 @@ module.exports = {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  movie_rating: DataTypes.INTEGER,
+  movie_rating: {
+    type:DataTypes.INTEGER,
+    validation:{
+      len: [0,5]
+    }
+  },
   like_count: DataTypes.INTEGER,
   movie_description: DataTypes.STRING,
   movie_release_date: DataTypes.DATE,
